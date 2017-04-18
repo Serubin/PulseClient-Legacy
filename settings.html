@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!--
+  Copyright 2016 Jake Klinker
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html lang="en" manifest="messenger.appcache">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Pulse">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Pulse</title>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#00695C">
+    <link rel="icon" sizes="192x192" href="resources/images/android-desktop.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Pulse">
+    <link rel="apple-touch-icon-precomposed" href="resources/images/ios-desktop.png">
+    <link rel="shortcut icon" href="resources/images/favicon.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <script src="https://code.getmdl.io/1.2.0/material.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.0/material.teal-orange.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="vendors/encryption/sjcl.js"></script>
+    <script src="vendors/encryption/hmacsha1.js"></script>
+    <script src="resources/js/global.js"></script>
+    <script src="resources/js/settings.js"></script>
+    <link rel="stylesheet" href="resources/css/global.css">
+    <link rel="stylesheet" href="resources/css/settings.css">
+</head>
+
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer mdl-color--grey-200">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <a id="back-button" class="back mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect mdl-layout--large-screen-only">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <span class="mdl-layout-title">Web Settings</span>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title" id="nav-drawer-title"></span>
+            <span class="mdl-layout-title" id="nav-drawer-subtitle"></span>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="conversations.html">Conversations</a>
+                <a class="mdl-navigation__link" href="archived.html">Archive</a>
+                <a class="mdl-navigation__link" href="scheduled_messages.html">Scheduled Messages</a>
+                <a class="mdl-navigation__link" href="blacklists.html">Blacklist</a>
+                <a class="mdl-navigation__link" href="my_account.html">My Account</a>
+                <a class="mdl-navigation__link mdl-navigation__link--current" href="#">Settings</a>
+                <a class="mdl-navigation__link" href="help_and_feedback.html">Help and Feedback</a>
+                <a class="mdl-navigation__link" href="#" id="logout">Log Out</a>
+            </nav>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="page-content" id="account-list">
+                <div class="spinner" id="loading">
+                    <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+                </div>
+                <!-- settings will be inserted here -->
+            </div>
+        </main>
+    </div>
+    <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+.item, .click-item {
+  height: 40px;
+  line-height: 40px;
+  width: 100%;
+  padding-left: 16px;
+}
+
+.item:hover, .click-item:hover {
+  background: #E0E0E0;
+}
+
+.click-item:hover {
+  cursor: pointer;
+}
+
+.adding {
+  background-color: rgba(0,0,0,.6);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+.adding-text {
+  width: 225px;
+  margin-left: 25px;
+  margin-top: 0px;
+}
+
+.adding-card {
+  width: 300px;
+  height: 125px;
+  margin: auto;
+  margin-top: 100px;
+}
+
+.adding-field {
+  width: 225px;
+  margin-left: 40px;
+}
+
+.update-button {
+  width: 75px;
+}
+
+.update-button:after {
+  content: "Update";
+}
+
+.cancel-button {
+  width: 90px;
+}
+
+.cancel-button:after {
+  content: "Cancel";
+}

@@ -1,0 +1,30 @@
+        <div class="mdl-layout__drawer mdl-layout--large-screen-only mdl-navigation-messages">
+            <span class="mdl-layout-title" id="nav-drawer-title"></span>
+            <span class="mdl-layout-title" id="nav-drawer-subtitle"></span>
+            <nav class="mdl-navigation-messages" id="conversation-list">
+              <!-- conversations will be inserted here -->
+            </nav>
+        </div>
+        <div class="drag-and-drop" id="draggable"></div>
+        <main class="mdl-layout__content" id="message-list-wrapper">
+            <div class="page-content" id="message-list">
+                <div class="spinner" id="loading">
+                    <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+                </div>
+                <!-- messages will be inserted here -->
+            </div>
+            <div class="send-bar">
+                <div class="send-bar-content" id="sendbar">
+                    <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" type="image" src="resources/images/ic_attach.png"/>
+                    <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" type="image" src="resources/images/ic_mood.png"/>
+                    <div class="entry mdl-textfield mdl-js-textfield">
+                        <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" autofocus></textarea>
+                        <label class="mdl-textfield__label" for="message-entry">Type message...</label>
+                    </div>
+                    <!-- fab with correct colors will be inserted here -->
+                    <button class="send mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect" id="send-button">
+                        <i class="material-icons md-18">send</i>
+                    </button>
+                </div>
+            </div>
+        </main>

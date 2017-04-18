@@ -1,0 +1,14 @@
+.item, .click-item {
+	line-height: 18px;
+	width: 100%;
+	padding: 16px;
+}
+
+.item:hover {
+	background: #E0E0E0;
+}
+
+.click-item:hover {
+	background: #E0E0E0;
+	cursor: pointer;
+}
