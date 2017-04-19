@@ -208,7 +208,7 @@ function Thread(conversation_id) {
                 + "&conversation_id=" + conversation_id 
                 + "&limit=1")
             .done(function (data, status) {
-                if (data.length > 0 && data[0].timestamp > latestTimestamp)
+                if (data.length > 0 && !currently_displayed.contains(data[0].device_id))
                     refreshMessages();
             });
 
