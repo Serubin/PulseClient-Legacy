@@ -88,7 +88,7 @@ function toColor(num) {
 }
 
 function getUrlParameter(sParam) {
-    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+    var sPageURL = decodeURIComponent(window.location.hash.split('?')[1]),
         sURLVariables = sPageURL.split('&'),
         sParameterName,
         i;
@@ -103,11 +103,7 @@ function getUrlParameter(sParam) {
 }
 
 function getBaseUrl() {
-    if (localStorage.getItem("staging") || getUrlParameter("staging") == "true") {
-        return "https://klinkerapps-messenger-staging.herokuapp.com";
-    } else {
         return "https://api.messenger.klinkerapps.com";
-    }
 }
 
 var failed = function(xhr, textstatus, errorThrown) {
@@ -153,6 +149,15 @@ function showConfirmDialog(message, func) {
   $("#cancel").click(function() {
     $(".confirm").remove();
   });
+}
+
+/**
+ * Scrolls message wrapper to bottom
+ */
+function scrollToBottom() {
+    var $message_wrap         = $("#message-list-wrapper");
+
+    $message_wrap.animate({"scrollTop": $('.mdl-layout__content')[0].scrollHeight}, 0);
 }
 
 /**

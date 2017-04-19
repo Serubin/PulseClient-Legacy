@@ -104,4 +104,4 @@ function setGlobalColor() {
         globalColorDark = "#000000";
         globalColorAccent = "#00BFA5";
     }
-
+}

@@ -1,39 +1,60 @@
 // CONST
-var PAGE_LOGIN      = "Login";
-var PAGE_THREAD     = "Thread";
-var PAGE_LIST       = "List";
+var PAGE_LOGIN      = "login";
+var PAGE_THREAD     = "thread";
+var PAGE_LIST       = "list";
 
-var accountId;
+var $content;
+var $insert;
+var $back_btn;
+var $more_btn;
+
+var account_id = localStorage.getItem("account_id");
+var page;
+
 var key;
 var combindedKey;
 var aes;
 
 var last_page;
 
-$(function(){
+$(Init);
 
-    var account_id = localStorage.getItem("account_id");
+function Init(){
 
-    if (accountId == null) 
-        window.location.hash = "#!" + PAGE_LOGIN;
-    
-    // Set up encryption
-    combinedKey     = accountId + ":" + localStorage.getItem("hash") + "\n";
-    key             = sjcl.misc.pbkdf2(combinedKey, localStorage.getItem("salt"), 10000, 256, hmacSHA1);
-    aes             = new sjcl.cipher.aes(key);
-    sjcl.beware["CBC mode is dangerous because it doesn't protect message integrity."]();
-
-    
-    // Set up base title
-    navDrawerTitle.html(localStorage.getItem("name"));
-    navDrawerSubtitle.html(
-        formatPhoneNumber(localStorage.getItem("phone_number"))
-    );
+    var $navd_title         = $("#nav-drawer-title");
+    var $navd_subtitle      = $("#nav-drawer-subtitle");
+    var $content            = $("#content");
+    var $inserted           = null
+    account_id              = localStorage.getItem("account_id");
+    $back_btn               = $("#back-button");
+    $more_btn               = $("#more-button");
 
     $(window).on('load', loadPage);
 
     $(window).on('hashchange', loadPage);
 
+    function constructor() {
+        if (account_id == null) 
+            window.location.hash = "#!" + PAGE_LOGIN;
+        else {
+            // Set up encryption
+            combinedKey     = account_id + ":" + localStorage.getItem("hash") + "\n";
+            key             = sjcl.misc.pbkdf2(combinedKey, localStorage.getItem("salt"), 10000, 256, hmacSHA1);
+            aes             = new sjcl.cipher.aes(key);
+            sjcl.beware["CBC mode is dangerous because it doesn't protect message integrity."]();
+        }   
+        
+        // Set up base title
+        $navd_title.html(localStorage.getItem("name"));
+        $navd_subtitle.html(
+            formatPhoneNumber(localStorage.getItem("phone_number"))
+        );
+
+
+        $back_btn.hide(); // Hide back button by default
+        $more_btn.hide(); // Hide back button by default
+    }
+    
     /**
      * Enables initial theme
      */
@@ -64,7 +85,7 @@ $(function(){
     function loadPage(){
         // Update  variables on page load
         lastPage    = page;
-        page        = window.location.hash.toLowerCase().replace("#!", "");
+        page        = window.location.hash.split('?')[0].toLowerCase().replace("#!", "");
         
         // Do nothing if the page is the same
         if(page === lastPage)
@@ -76,9 +97,25 @@ $(function(){
         }
         
         var sectionFunc = window[page.ucFirst()]; // Get function
-        if(typeof sectionFunc == "function") // Exec function
+        if(typeof sectionFunc != "function") // Exec function
+                window.location.hash = "#!" + PAGE_LIST; // Just kidding, default to transactions page
+
+        $.get("pages/" + page.toLowerCase() + ".html", success);
+
+        function success(data){
+            if ($inserted != null) 
+                $inserted.remove();
+
+            $inserted = $(data);
+            $inserted.attr("data-content", "inserted");
+
+            $content.append($inserted);
+            
+            componentHandler.upgradeElements($("[data-content]"));
+
             sectionFunc();
-        else // Panic!
-            window.location.hash = "#!" + PAGE_LIST; // Just kidding, default to transactions page
+        }
     }
-});
+
+    constructor();
+}

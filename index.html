@@ -19,12 +19,10 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Pulse SMS, the ultimate Android messaging experience! Send text messages from any of your devices, for seamless integration with your phone.">
+    <meta name="description" content="Pulse">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="google-site-verification" content="tPxT_k73pH_OS9NyDAdQWsFq6PIlPkXOkgL1LRCUajg" />
-    <title>Pulse SMS</title>
+    <title>Pulse</title>
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#00695C">
     <link rel="icon" sizes="192x192" href="resources/images/android-desktop.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -34,59 +32,70 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <script src="https://code.getmdl.io/1.2.0/material.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.2.0/material.teal-orange.min.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.0/material.grey-orange.min.css" />
+    <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase-storage.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="resources/css/index.css">
-    <script src="resources/js/index.js"></script>
-    <link rel="stylesheet" href="resources/css/privacy.css">
+    <script src="vendors/encryption/sjcl.js"></script>
+    <script src="vendors/encryption/hmacsha1.js"></script>
+    <script src="vendors/linkify/linkify.min.js"></script>
+    <script src="vendors/linkify/linkify-jquery.min.js"></script>
+    <script src="vendors/textarea-autogrow.min.js"></script>
+    <link rel="stylesheet" href="vendors/emoji/jquery.emojipicker.css">
+    <script src="vendors/emoji/jquery.emojipicker.js"></script>
+    <link rel="stylesheet" href="vendors/emoji/jquery.emojipicker.tw.css">
+    <script src="vendors/emoji/jquery.emojis.js"></script>
+    <script src="resources/js/Config.js"></script>
+    <script src="resources/js/Init.js"></script>
+    <script src="resources/js/Helper.js"></script>
+    <script src="resources/js/Theme.js"></script>
+    <script src="resources/js/Thread.js"></script>
+    <script src="resources/js/Login.js"></script>
+    <link rel="stylesheet" href="resources/css/global.css">
+    <link rel="stylesheet" href="resources/css/messages.css">
+    <link rel="stylesheet" href="resources/css/conversations.css">
 </head>
 
 <body>
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer mdl-color--grey-200">
-        <header class="mdl-layout__header">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer mdl-color--grey-200" id="content">
+        <header class="mdl-layout__header" id="toolbar">
             <div class="mdl-layout__header-row">
-                <span class="mdl-layout-title mdl-layout--small-screen-only">Pulse</span>
+                <a id="back-button" class="back mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <span class="mdl-layout-title" id="toolbar-title">Pulse</span>
                 <div class="mdl-layout-spacer"></div>
-                <nav class="mdl-navigation mdl-layout--large-screen-only">
-                    <a class="mdl-navigation__link" href="login.html">Log In</a>
-                </nav>
+                <a id="refresh-button" class="refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                    <i class="material-icons">refresh</i>
+                </a>
+                <button class="android-more-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" id="more-button">
+                  <i class="material-icons">more_vert</i>
+                </button>
+                <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right mdl-js-ripple-effect" for="more-button">
+                    <!-- 3-dot menu -->
+                    <li class="mdl-menu__item">
+                        <a class="mdl-menu__item" id="delete-conversation" href="#">Delete Conversation</a>
+                    </li>
+                    <li class="mdl-menu__item">
+                        <a class="mdl-menu__item" id="archive-conversation" href="#">Archive Conversation</a>
+                    </li>
+                    <li id="blacklist-option" class="mdl-menu__item">
+                        <a class="mdl-menu__item" id="blacklist-contact" href="#">Blacklist Contact</a>
+                    </li>
+                </ul>
             </div>
         </header>
-        <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title">Pulse</span>
-            <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="login.html">Log In</a>
-                <a class="mdl-navigation__link" href="features.html">Features</a>
-                <a class="mdl-navigation__link" href="supported_platforms.html">Supported Platforms</a>
-                <a class="mdl-navigation__link" href="faq.html">FAQs</a>
-                <a class="mdl-navigation__link" href="privacy.html">Privacy Policy</a>
+        <div class="mdl-layout__drawer mdl-layout--large-screen-only mdl-navigation-messages">
+            <span class="mdl-layout-title" id="nav-drawer-title"></span>
+            <span class="mdl-layout-title" id="nav-drawer-subtitle"></span>
+            <nav class="mdl-navigation-messages" id="side-menu-insert">
+              <!-- conversations/menu will be inserted here -->
             </nav>
         </div>
-        <main class="messenger-main mdl-layout__content">
-            <div class="messenger-container mdl-grid">
-                <div class="mdl-layout__header-row"></div>
-                <div class="messenger-promo-container mdl-grid">
-                    <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
-                    <div class="messenger-promo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
-                        <img src="resources/images/banner.png" alt="Pulse SMS - The ultimate Android messaging experience." />
-                        <h4>The next iteration for <i>Klinker Apps</i></h4>
-                        <p>
-                            <i>Pulse</i> was designed from the ground up to give you great performance, customization, a ton of <a href="features.html">features</a>, and a sleek look to your text messaging, and wow does it accomplish those goals.
-                        </p>
-                        <p>
-                            Download our <a href="https://play.google.com/store/apps/details?id=xyz.klinker.messenger" target="_blank">Android</a> app to get started, then try messaging from a tablet, Android Wear watch, Android TV, sign on to this <a href="https://messenger.klinkerapps.com/" target="_blank">website</a>, try out our stand-alone Google Chrome <a href="http://goo.gl/2bdv7J" target="_blank">app</a>, or check out our Google Chrome <a href="http://goo.gl/vQPpLW" target="_blank">browser extension</a>!
-                        </p>
-                        <p>
-                           To view a full list of the platforms we support, check out our <a href="supported_platforms.html">supported platforms</a> page!
-                        </p>
-                        <p>
-                            Once you try it, we know you will agree: <i>Pulse</i> is the prime messaging experience on <i>Android</i>.
-                        </p>
-                        <br>
-                    </div>
-                </div>
-            </div>
-        </main>
+    </div>
+    <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
     </div>
 </body>
 

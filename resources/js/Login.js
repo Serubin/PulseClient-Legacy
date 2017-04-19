@@ -29,6 +29,12 @@ function Login() {
         localStorage.setItem("global_color_theme", data.global_color_theme);
         localStorage.setItem("base_theme", data.base_theme);
         localStorage.setItem("rounder_bubbles", data.rounder_bubbles + "");
+            
+
+        combinedKey     = account_id + ":" + localStorage.getItem("hash") + "\n";
+        key             = sjcl.misc.pbkdf2(combinedKey, localStorage.getItem("salt"), 10000, 256, hmacSHA1);
+        aes             = new sjcl.cipher.aes(key);
+        sjcl.beware["CBC mode is dangerous because it doesn't protect message integrity."]();
 
         if (getUrlParameter("activate") == "true") {
             window.location.replace("activate.html"); //TODO fix urls

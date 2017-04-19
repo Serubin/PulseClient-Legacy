@@ -3,7 +3,7 @@
  * @author Solomon Rubin (Serubin.net)
  */
 
-function Thread(conversationId) {
+function Thread(conversation_id) {
     
     // static options
     var latestTimestamp     = 0;
@@ -11,27 +11,29 @@ function Thread(conversationId) {
     // global tracking vars
     var initial_load        = true;
     var currently_displayed = [];
+    
 
     // Theming info
+    var conversation_id     = getUrlParameter("conversation_id");
     var archived            = getUrlParameter("archived");
-    var title               = localStorage.getItem(conversationId + "title");
+    var title               = localStorage.getItem(conversation_id + "title");
     var color               = hasGlobalTheme() ? 
                                globalColor : 
-                                localStorage.getItem(conversationId + "color");
+                                localStorage.getItem(conversation_id + "color");
     var colorDark           = hasGlobalTheme() ? 
                                globalDarkColor : 
-                                localStorage.getItem(conversationId + "colorDark");
+                                localStorage.getItem(conversation_id + "colorDark");
     var colorAccent         = hasGlobalTheme() ? 
                                globalAccentColor : 
-                                localStorage.getItem(conversationId + "colorAccent");
-    var phoneNumbers        = localStorage.getItem(conversationId + "phoneNumbers");
+                                localStorage.getItem(conversation_id + "colorAccent");
+    var phoneNumbers        = localStorage.getItem(conversation_id + "phoneNumbers");
     var msg_theme           = (hasRounderBubbles() ? "message-round " : "message ");
 
     // DOM objects  
+    var snackbarContainer   = document.querySelector('#snackbar');
     var $msg_entry          = $("#message-entry");
     var $send_btn           = $("#send-button");
     var $refresh_btn        = $("#refresh-button");
-    var $back_btn           = $("#back-button");
     var $mlist_wrap         = $("#message-list-wrapper");
     var $msg_list           = $("#message-list");
     var $archive_conver     = $("#archive-conversation");
@@ -41,13 +43,13 @@ function Thread(conversationId) {
     var $delete_btn         = $("#delete-conversation");
     var $emoji_btn          = $("#emoji");
     var $attach             = $("#attach");
-    var $navd_title = $("#nav-drawer-title";
-    var $navd_subtitle = $("#nav-drawer-subtitle");
-
+    var $navd_title         = $("#nav-drawer-title");
+    var $navd_subtitle      = $("#nav-drawer-subtitle");
+    
     function constructor() {
 
         // Set conversation Title
-        document.title("Pulse - " + title);
+        document.title ="Pulse - " + title;
         $navd_title.html(title);
         $navd_subtitle.html(formatPhoneNumber(phoneNumbers));
 
@@ -59,6 +61,13 @@ function Thread(conversationId) {
         $send_btn.css("background-color", colorAccent);
         $("head").append("<meta name=\"theme-color\" content=\"" + colorDark + "\">")
     
+        
+        $back_btn.show(); // Hide back button by default
+        $more_btn.show(); // Hide back button by default
+        
+        $back_btn.on('click', function() {
+            window.location.hash = "#!" + PAGE_LIST;
+        });
 
         if (archived === 'true') {
             $back_btn.click(function() {
@@ -95,7 +104,7 @@ function Thread(conversationId) {
             showConfirmDialog("Are you sure you want to delete this conversation?", function() {
             var url = getBaseUrl() 
                     + "/api/v1/conversations/remove/" 
-                    + conversationId + "?account_id=" + accountId
+                    + conversation_id + "?account_id=" + account_id
                 $.post(url)
                     .done(function(data) { 
                         window.location.replace("conversations.html");  // TODO change this
@@ -108,15 +117,15 @@ function Thread(conversationId) {
             if (archived === 'true') {
                 var url = getBaseUrl() 
                     + "/api/v1/conversations/unarchive/" 
-                    + conversationId + "?account_id=" + accountId + "&archive=true"
+                    + conversation_id + "?account_id=" + account_id + "&archive=true"
                 $.post()
                     .done(function(data) { 
                         window.location.replace("archived.html"); 
                     }).fail(failed);
             } else {
                 var url = getBaseUrl() 
-                    + "/api/v1/conversations/archive/" + conversationId 
-                    + "?account_id=" + accountId + "&archive=true"
+                    + "/api/v1/conversations/archive/" + conversation_id 
+                    + "?account_id=" + account_id + "&archive=true"
                 $.post()
                     .done(function(data) { 
                         window.location.replace("conversations.html"); // TODO Change this
@@ -176,7 +185,7 @@ function Thread(conversationId) {
 
         // Handle send button event
         $send_btn.on('click', function() {
-            var text = $$msg_entry.val().trim();
+            var text = $msg_entry.val().trim();
 
             if (text.length > 0) {
                 sendSmsMessage(text);
@@ -188,7 +197,22 @@ function Thread(conversationId) {
                 showSnackbar("No message to send");
             }
         });
+        
+        refreshMessages();
+        setTimeout(checkNewMessages, config.refresh_rate);
+    }
 
+    function checkNewMessages() {
+        $.get(getBaseUrl() 
+                + "/api/v1/messages?account_id=" + account_id 
+                + "&conversation_id=" + conversation_id 
+                + "&limit=1")
+            .done(function (data, status) {
+                if (data.length > 0 && data[0].timestamp > latestTimestamp)
+                    refreshMessages();
+            });
+
+        setTimeout(checkNewMessages, config.refresh_rate);
     }
 
     /**
@@ -202,10 +226,10 @@ function Thread(conversationId) {
             limit = config.load_limit;
 
         $.get(getBaseUrl() 
-                + "/api/v1/messages?account_id=" + accountId 
-                + "&conversation_id=" + conversationId 
+                + "/api/v1/messages?account_id=" + account_id 
+                + "&conversation_id=" + conversation_id 
                 + "&limit=" + limit)
-            .done(listConversation)
+            .done(renderThread)
             .fail(failed);
     }
     
@@ -227,8 +251,8 @@ function Thread(conversationId) {
     *
     */
     function sendMessage(id, data, mimeType) {
-        $conversation_snippet   = $("#conversation-snippet-" + conversationId);
-        $conversation_title     = $("#conversation-title-" + conversationId);
+        $conversation_snippet   = $("#conversation-snippet-" + conversation_id);
+        $conversation_title     = $("#conversation-title-" + conversation_id);
 
         var encrypted = encrypt(data);
         var snippetEncrypted = encrypt("You: " + data);
@@ -240,7 +264,7 @@ function Thread(conversationId) {
     
 
         // Create message for thread
-        msg_class = "sent " + textClass + msg_theme;
+        msg_class = "sent " + textClass + " " + msg_theme;
         
         var msg_content = "";
         if (mimeType == "text/plain")
@@ -256,9 +280,9 @@ function Thread(conversationId) {
 
         // Define request
         var request = {
-            account_id: accountId,
+            account_id: account_id,
             device_id: id,
-            device_conversation_id: conversationId,
+            device_conversation_id: conversation_id,
             message_type: 2,
             data: encrypted,
             timestamp: new Date().getTime(),
@@ -272,16 +296,16 @@ function Thread(conversationId) {
 
 
         var conversationRequest = {
-            account_id: accountId,
+            account_id: account_id,
             read: true,
             timestamp: new Date().getTime(),
             snippet: mimeType == "text/plain" ? snippetEncrypted : ""
         };
 
-        $.post(getBaseUrl() + "/api/v1/conversations/update/" + conversationId, conversationRequest, "json");
+        $.post(getBaseUrl() + "/api/v1/conversations/update/" + conversation_id, conversationRequest, "json");
 
         if (mimeType != "text/plain") {
-            loadImage(id, accountId, mimeType);
+            loadImage(id, account_id, mimeType);
         }
 
         $(".message").linkify();
@@ -320,7 +344,7 @@ function Thread(conversationId) {
                     var encrypted = encoder.encode(encryptData(new Uint8Array(e.target.result)));
 
                     var storageRef = firebase.storage().ref();
-                    var accountRef = storageRef.child(accountId);
+                    var accountRef = storageRef.child(account_id);
                     var messageId = generateId();
                     var messageRef = accountRef.child(messageId + "");
                     messageRef.put(encrypted).then(function(snapshot) {
@@ -410,7 +434,7 @@ function Thread(conversationId) {
             }
 
             // Add rounded messages - or not
-            msg_class += msg_theme
+            msg_class += " " + msg_theme
 
             // If text message
             if (mimeType == "text/plain") {
@@ -468,12 +492,13 @@ function Thread(conversationId) {
                 msg_is_mms = true;
             }
 
-            if (data[i].message_from != null 
+            if ((data[i].message_from != null 
                     && data[i].message_from.length) != 0 
-                    && data[i].message_type == 0 )
+                    && data[i].message_type == 0 ) {
                 var $from = $("<b>" + data[i].message_from + ":</b><br/>")
-
-            msg_content.prepend($from);
+                console.log(msg_content);
+                msg_content.prepend($from);
+            }
 
             var $message = messageFactory(message.device_id, 
                     msg_class, msg_style, msg_content);
@@ -482,7 +507,7 @@ function Thread(conversationId) {
 
             // Add media messages to 
             if(msg_is_mms)
-                loadImage(message.device_id, accountId, mimeType, name)
+                loadImage(message.device_id, account_id, mimeType, name)
             
             // TODO revisit later
             var nextTimestamp;
@@ -566,15 +591,9 @@ function Thread(conversationId) {
     }
 
 
-    /**
-     * Scrolls message wrapper to bottom
-     */
-    function scrollToBottom() {
-       $message_wrap.animate({"scrollTop": $('.mdl-layout__content')[0].scrollHeight}, 0);
-    }
 
     function dismissNotification() {
-            $.post(getBaseUrl() + "/api/v1/accounts/dismissed_notification?account_id=" + accountId + "&id=" + conversationId);
+            $.post(getBaseUrl() + "/api/v1/accounts/dismissed_notification?account_id=" + account_id + "&id=" + conversation_id);
         console.log("Notifcations Dismissed");
     }
 
@@ -590,6 +609,43 @@ function Thread(conversationId) {
         $("#message-list").append(html);
         currently_displayed.push(id)
     }
+ 
+    function setVariables(data, status) {
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].device_id == conversation_id) {
+                try {
+                    title = decrypt(data[i].title);
+                    phoneNumbers = decrypt(data[i].phone_numbers);
+                    color = toColor(data[i].color);
+                    colorDark = toColor(data[i].color_dark);
+                    colorAccent = toColor(data[i].color_accent);
+                } catch (err) { }
+                break;
+            }
+        }
 
+        // write them back so that they are available immediately next time
+        localStorage.setItem(conversation_id + "title", title);
+        localStorage.setItem(conversation_id + "phoneNumbers", phoneNumbers);
+        localStorage.setItem(conversation_id + "color", color);
+        localStorage.setItem(conversation_id + "colorDark", colorDark);
+        localStorage.setItem(conversation_id + "colorAccent", colorAccent);
+    
+
+        constructor();
+    }
+
+    if (phoneNumbers === null) {
+        // need to make an ajax request since it isn't stored locally.
+        // this happens when you haven't loaded a conversation on the web app
+        // and you try to open a notification from the chrome app/extension
+        $.get(getBaseUrl() + "/api/v1/conversations?account_id=" + account_id)
+            .done(setVariables)
+            .fail(failed);
+    } else {
+        constructor();
+    }
+
+    
 }
 
