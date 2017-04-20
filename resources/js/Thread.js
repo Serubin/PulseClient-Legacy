@@ -4,7 +4,11 @@
  */
 
 function Thread(conversation_id) {
-    
+    var $parent = $("[data-content=inserted]");
+
+    // Page id
+    var page_id;
+
     // static options
     var latestTimestamp     = 0;
     
@@ -47,9 +51,12 @@ function Thread(conversation_id) {
     var $navd_subtitle      = $("#nav-drawer-subtitle");
     
     function constructor() {
+        
+        page_id = "thread" + conversation_id + new Date();
+        current_page_id = page_id;
 
         // Set conversation Title
-        document.title ="Pulse - " + title;
+        document.title = "Pulse - " + title;
         $navd_title.html(title);
         $navd_subtitle.html(formatPhoneNumber(phoneNumbers));
 
@@ -86,21 +93,21 @@ function Thread(conversation_id) {
         });
 
         // On Drag/Dropa events 
-        $mlist_wrap.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+        $parent.on('drag dragstart dragend dragover dragenter dragleave drop', '#message-list-wrapper', function(e) {
             e.preventDefault();
             e.stopPropagation();
         })
-        .on('dragover dragenter', function() {
+        .on('dragover dragenter', '#message-list-wrapper' ,function() {
             $draggable.addClass("is-dragover");
         })
-        .on('dragleave dragend drop', function() {
+        .on('dragleave dragend drop', '#message-list-wrapper', function() {
             $draggable.removeClass("is-dragover");
         })
-        .on('drop', dropListener);
+        .on('drop','#message-list-wrapper', dropListener);
 
 
         // Delete button event
-        $delete_btn.on('click', function() {
+        $parent.on('click', '#delete-button', function() {
             showConfirmDialog("Are you sure you want to delete this conversation?", function() {
             var url = getBaseUrl() 
                     + "/api/v1/conversations/remove/" 
@@ -113,7 +120,7 @@ function Thread(conversation_id) {
         });
         
         // Archive convo button
-        $archive_conver.on('click', function() {
+        $parent.on('click', '#archive-conversation', function() {
             if (archived === 'true') {
                 var url = getBaseUrl() 
                     + "/api/v1/conversations/unarchive/" 
@@ -134,7 +141,7 @@ function Thread(conversation_id) {
         });
         
         // Refresh messages event
-        $refresh_btn.on('click', function() {
+        $parent.on('click', '#refresh-button', function() {
             $msg_list.html("<div class=\"spinner\" id=\"loading\">"
                 + "<div class=\"mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active\"></div>"
                 + "</div>");
@@ -148,7 +155,7 @@ function Thread(conversation_id) {
         });
         
         // On scroll - hides snackbar 
-        $mlist_wrap.scroll(function(){
+        $mlist_wrap.on('scroll', function(){
             if(!snackbarContainer.MaterialSnackbar.active)
                 return false;
             
@@ -159,7 +166,7 @@ function Thread(conversation_id) {
         });
 
         // Message entry fixes (prevent default)
-        $msg_entry.on('keydown', function(event) {
+        $parent.on('keydown', '#message-entry', function(event) {
             if(event.keyCode == 13 && !event.shiftKey) {
                 event.preventDefault();
                 return false;
@@ -168,7 +175,7 @@ function Thread(conversation_id) {
             return true;
         });
 
-        $msg_entry.on('keyup', function(event) {
+        $parent.on('keyup', '#message-entry',  function(event) {
             if(event.keyCode == 13 && !event.shiftKey) {
                 $send_btn.click();
                 scrollToBottom()
@@ -184,7 +191,7 @@ function Thread(conversation_id) {
         
 
         // Handle send button event
-        $send_btn.on('click', function() {
+        $parent.on('click', '#send-button', function() {
             var text = $msg_entry.val().trim();
 
             if (text.length > 0) {
@@ -201,14 +208,19 @@ function Thread(conversation_id) {
         refreshMessages();
         setTimeout(checkNewMessages, config.refresh_rate);
     }
-
+    
     function checkNewMessages() {
+
+        if (current_page_id != page_id)
+            return;
+
         $.get(getBaseUrl() 
                 + "/api/v1/messages?account_id=" + account_id 
                 + "&conversation_id=" + conversation_id 
                 + "&limit=1")
             .done(function (data, status) {
-                if (data.length > 0 && !currently_displayed.contains(data[0].device_id))
+                if (data.length > 0 
+                        && !currently_displayed.contains(data[0].device_id))
                     refreshMessages();
             });
 

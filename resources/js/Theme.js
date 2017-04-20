@@ -105,3 +105,4 @@ function setGlobalColor() {
         globalColorAccent = "#00BFA5";
     }
 }
+

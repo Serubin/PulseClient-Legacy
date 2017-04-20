@@ -1,126 +1,192 @@
 
 
 function Conversations() {
+    var page_id;
+
+    var $toolbar_title      = $("#toolbar-title");
+    var $navd_title         = $("#nav-drawer-title");
+    var $navd_subtitle      = $("#nav-drawer-subtitle");
+    var $refresh_btn        = $("#refresh-button");
+    var $convo_list         = $("#conversation-list");
+
     function constructor() {
+        page_id = "conversationlist" + new Date();
+        current_page_id = page_id;
 
+        // Set page title
+        document.title = "Pulse";
+        $toolbar_title.html("Pulse");
+        $navd_title.html(localStorage.getItem("name"));
+        $navd_subtitle.html(
+            formatPhoneNumber(localStorage.getItem("phone_number"))
+        );
+
+        $refresh_btn.click(function() {
+            $convo_list.empty();
+            $convo_list.html("<div class=\"spinner\" id=\"loading\">"
+                + "<div class=\"mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active\"></div>"
+                + "</div>");
+            
+            refreshConversations();
+        });
+
+        refreshConversations();
     }
-    
-    
 
+    function refreshConversations() {
+        $.get(getBaseUrl() + "/api/v1/conversations/" + getIndex() + "?account_id=" + account_id)
+            .done(function(data) {
+                renderConversation($convo_list, data);
+            })
+            .fail(failed);
+    }
+
+    function getIndex() { // TODO, archived support
+        return "index_unarchived";
+    }
+
+    constructor();
 }
 
 
-function renderConversation($elem) {
+function renderConversation($elem, data) {
 
     // Create element
     $elem.attr("data-conversation-list", "true");
+    $elem.html(""); // Clear contents
 
     var loading = $("#loading");
     if (loading) {
         loading.remove();
     }
     
-    var items = [];
-    var decrypted = [];
-    var itemSize = 0;
-    var decryptedSize = 0;
+    var conversations = [];
 
     var $pinned_wrap = $("<div></div>").attr("id", "pinned");  
+    var $pinned_title = $("<div></div>").addClass("label")
+                    .addClass("mdl-color-text--grey-500")
+                    .html("Pinned");
+        $pinned_wrap.append($pinned_title);
+
+    var $convo_title = $("<div></div>").addClass("label")
+                    .addClass("mdl-color-text--grey-500")
+                    .html("Conversations");
+
 
     for (var i = 0; i < data.length; i++) {
-        if (i != 0)  // if we have multiple items in a row with the same id, don't display any after the first
-            if (data[i].device_id == data[i - 1].device_id) 
-                continue;
+        
+        var convo = data[i];
+        var read_style      = convo.read ? "" : " bold"
+
+        // if we have multiple items in a row with the same id, don't display any after the first
+        if (i != 0 && convo.device_id == data[i - 1].device_id) 
+            continue;
         
     
 
-        if (i == 0 && data[i].pinned)
-            $("<div></div>").addClass("label")
-                    .addClass("mdl-color-text--grey-500")
-                    .html("Pinned");
-            items[itemSize++] = "<div class=\"label mdl-color-text--grey-500\">Pinned</div>";
-        else if (i != 0 && !data[i].pinned && data[i-1].pinned) 
-            items[itemSize++] = "<div class=\"label mdl-color-text--grey-500\">Conversations</div>";
+        if (i == 0 && convo.pinned) {
+            $elem.append($pinned_wrap);
+            $elem.append($convo_title);
+        }
+
+
+        try {
+            convo.title = decrypt(convo.title);
+        } catch (err) {
+            continue;
+        }
+
+        try {
+            convo.snippet = decrypt(convo.snippet).replace(/<.*>/g, "");
+        } catch (err) {
+            convo.snippet = "";
+        }
+
+        try {
+            convo.phone_numbers = decrypt(convo.phone_numbers);
+        } catch (err) {
+            convo.phone_numbers = "";
+        }
+
+        convo.color         = toColor(convo.color);
+        convo.color_dark    = toColor(convo.color_dark);
+        convo.color_accent  = toColor(convo.color_accent);
         
+        $convo_wrap  = $("<div></div>").addClass("conversation-card mdl-card")
+                        .addClass("mdl-shadow--2dp mdl-js-button")
+                        .addClass("mdl-js-ripple-effect")
+                        .attr("id", convo.device_id);
 
-        try {
-          data[i].title = decrypt(data[i].title);
-        } catch (err) {
-          continue;
-        }
+        $icon       = "<svg class=\"contact-img\" height=\"48\" width=\"48\">"
+                    + "<circle cx=\"24\" cy=\"24\" r=\"24\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
+                    + "</svg>";
 
-        try {
-          data[i].snippet = decrypt(data[i].snippet).replace(/<.*>/g, "");
-        } catch (err) {
-          data[i].snippet = "";
-        }
+        $text_wrap  = $("<p></p>").addClass("conversation-text");
 
-        try {
-          data[i].phone_numbers = decrypt(data[i].phone_numbers);
-        } catch (err) {
-          data[i].phone_numbers = "";
-        }
+        $title      = $("<span></span>").addClass("conversation-title mdl-card__supporting-text")
+                        .addClass(read_style)
+                        .html(convo.title);
 
-        data[i].color = toColor(data[i].color);
-        data[i].color_dark = toColor(data[i].color_dark);
-        data[i].color_accent = toColor(data[i].color_accent);
-        decrypted[decryptedSize++] = data[i];
+        $break      = $("<br />");
 
-        items[itemSize++] =
-              "<div class=\"conversation-card mdl-card mdl-shadow--2dp mdl-js-button mdl-js-ripple-effect\" id=\"" + data[i].device_id + "\">"
-            + "<svg class=\"contact-img\" height=\"48\" width=\"48\">"
-            + "<circle cx=\"24\" cy=\"24\" r=\"24\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
-            + "</svg>"
-            + "<p class=\"conversation-text\">"
-            + "<span class=\"conversation-title mdl-card__supporting-text" + (data[i].read ? "" : " bold") +"\">" + data[i].title + "</span><br/>"
-            + "<span class=\"conversation-snippet mdl-card__supporting-text" + (data[i].read ? "" : " bold") +"\">" + data[i].snippet + "</span>"
-            + "</p>"
-            + "</div>";
+        $snippet    = $("<span></span>").addClass("conversation-snippet mdl-card__supporting-text")
+                        .addClass(read_style)
+                        .html(convo.snippet);
+
+        $text_wrap.append($title, $break, $snippet);
+        $convo_wrap.append($icon, $text_wrap);
+        
+        if (convo.pinned) 
+            $pinned_wrap.append($convo_wrap);
+        else
+            $elem.append($convo_wrap);
+        
+        conversations.push(convo);
     }
 
-    if (items.length > 0) {
-        $("#conversation-list").html(items.join(''));
-
-        for (var i = 0; i < decrypted.length; i++) {
-            $("#" + decrypted[i].device_id).click({
-                deviceId: decrypted[i].device_id,
-                title: decrypted[i].title,
-                color: decrypted[i].color,
-                colorDark: decrypted[i].color_dark,
-                colorAccent: decrypted[i].color_accent,
-                phoneNumbers: decrypted[i].phone_numbers,
-                read: decrypted[i].read,
-                archived: decrypted[i].archive
-            }, function(event) {
-                localStorage.setItem(event.data.deviceId + "title", event.data.title);
-                localStorage.setItem(event.data.deviceId + "color", event.data.color);
-                localStorage.setItem(event.data.deviceId + "colorDark", event.data.colorDark);
-                localStorage.setItem(event.data.deviceId + "colorAccent", event.data.colorAccent);
-                localStorage.setItem(event.data.deviceId + "phoneNumbers", event.data.phoneNumbers);
-
-                if (!event.data.read) {
-                    $.post(getBaseUrl() + "/api/v1/conversations/read/" + event.data.deviceId + "?account_id=" + accountId);
-                    //$.post(getBaseUrl() + "/api/v1/accounts/dismissed_notification?account_id=" + accountId + "&id=" + event.data.deviceId);
-                }
-
-                if(event.data.archived) {
-                    window.location.href = "messages.html?conversation_id=" + event.data.deviceId + "&archived=true";
-                } else {
-                    window.location.href = "messages.html?conversation_id=" + event.data.deviceId;
-                }
-            });
-        }
-
-        componentHandler.upgradeDom();
-    } else {
-        $("#conversation-list").remove();
-        $(".mdl-layout__content").html("<div class=\"empty\"><div class=\"empty-text\">"
+    if (conversations.length == 0) {
+        $elem.html("<div class=\"empty\"><div class=\"empty-text\">"
             + "No conversations to display!"
             + "</div></div>");
+
+        return
     }
-}
+
+    for (var i = 0; i < conversations.length; i++) {
+        var convo = conversations[i];
+        $("#" + convo.device_id).on('click', {
+            deviceId: convo.device_id,
+            title: convo.title,
+            color: convo.color,
+            colorDark: convo.color_dark,
+            colorAccent: convo.color_accent,
+            phoneNumbers: convo.phone_numbers,
+            read: convo.read,
+            archived: convo.archive
+        }, function(event) {
+            localStorage.setItem(event.data.deviceId + "title", event.data.title);
+            localStorage.setItem(event.data.deviceId + "color", event.data.color);
+            localStorage.setItem(event.data.deviceId + "colorDark", event.data.colorDark);
+            localStorage.setItem(event.data.deviceId + "colorAccent", event.data.colorAccent);
+            localStorage.setItem(event.data.deviceId + "phoneNumbers", event.data.phoneNumbers);
+
+            if (!event.data.read) 
+                $.post(getBaseUrl() + "/api/v1/conversations/read/" + event.data.deviceId + "?account_id=" + account_id);
+
+                window.location.hash = "#!" + PAGE_THREAD + "?conversation_id=" 
+                    + event.data.deviceId 
+                    + (event.data.archived ? "&archived=true" : "");
+
+            if (page == PAGE_THREAD)
+                forceUpdate();
+            
+        });
+    }
+    console.log("Called!");
+    componentHandler.upgradeElements($elem);
 }
 
 function updateConversation($elem) {
 
 }
+

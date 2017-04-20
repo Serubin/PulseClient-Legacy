@@ -1,7 +1,7 @@
 // CONST
 var PAGE_LOGIN      = "login";
 var PAGE_THREAD     = "thread";
-var PAGE_LIST       = "list";
+var PAGE_LIST       = "conversations";
 
 var $content;
 var $insert;
@@ -16,6 +16,7 @@ var combindedKey;
 var aes;
 
 var last_page;
+var current_page_id;
 
 $(Init);
 
@@ -103,19 +104,23 @@ function Init(){
         $.get("pages/" + page.toLowerCase() + ".html", success);
 
         function success(data){
-            if ($inserted != null) 
+            if ($inserted != null) {
+                $inserted.off();
                 $inserted.remove();
+            }
 
             $inserted = $(data);
             $inserted.attr("data-content", "inserted");
 
             $content.append($inserted);
             
-            componentHandler.upgradeElements($("[data-content]"));
+            componentHandler.upgradeElements($("[data-content=inserted]"));
 
             sectionFunc();
         }
     }
+
+    forceUpdate = loadPage;
 
     constructor();
 }
