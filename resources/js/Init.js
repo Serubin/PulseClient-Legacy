@@ -10,6 +10,7 @@ var $more_btn;
 
 var account_id = localStorage.getItem("account_id");
 var page;
+var g_setPage;
 
 var key;
 var combindedKey;
@@ -31,12 +32,12 @@ function Init(){
     $more_btn               = $("#more-button");
 
     $(window).on('load', loadPage);
-
     $(window).on('hashchange', loadPage);
+    $(window).on('popstate', loadPage);
 
     function constructor() {
         if (account_id == null) 
-            window.location.hash = "#!" + PAGE_LOGIN;
+            setPage(config.base_url + PAGE_LOGIN);
         else {
             // Set up encryption
             combinedKey     = account_id + ":" + localStorage.getItem("hash") + "\n";
@@ -54,6 +55,7 @@ function Init(){
 
         $back_btn.hide(); // Hide back button by default
         $more_btn.hide(); // Hide back button by default
+
     }
     
     /**
@@ -82,26 +84,53 @@ function Init(){
         $("#nav-drawer-subtitle").css("background-color", globalColorDark);
         $("#compose").css("background-color", globalColorAccent);
     }
+    
+    function setPage(url, push_state) {
+        if(typeof push_state == "undefined" || push_state)
+            history.pushState({}, '', window.location.href.slice(0, window.location.href.lastIndexOf(window.location.pathname)) + config.base_url + url);
 
-    function loadPage(){
-        // Update  variables on page load
-        lastPage    = page;
-        page        = window.location.hash.split('?')[0].toLowerCase().replace("#!", "");
+        loadPage(config.base_url + url);
+    }
+
+    function loadPage(url){
+        // Parse url
+        var data; // Url data
+
+        if(typeof url != "string")
+            url = window.location.pathname;
         
+        // Remove base url (base path)
+        if (url.indexOf(config.base_url) == 0)
+            url = url.slice(config.base_url.length, url.length)
+        
+        // Split for use
+        url         = url.split('/');
+        page        = url[0];
+        url_data    = url.splice(1, url.length);
+
+
         // Do nothing if the page is the same
-        if(page === lastPage)
+        if(page === last_page)
             return;
+
+        // Handle index
+        if(page == "") 
+            page = PAGE_LIST;
+
+        // Update  variables on page load
+        last_page    = page;
+        
+            
         // Redirect to login if token isn't set.
-        if(account_id == null && page != PAGE_LOGIN) { 
-            window.location.hash = "#!" + PAGE_LOGIN;
-            return;
-        }
+        if(account_id == null && page != PAGE_LOGIN) 
+            return setPage(PAGE_LOGIN);
+
         
         var sectionFunc = window[page.ucFirst()]; // Get function
         if(typeof sectionFunc != "function") // Exec function
-                window.location.hash = "#!" + PAGE_LIST; // Just kidding, default to transactions page
+            return setPage(PAGE_LIST);
 
-        $.get("pages/" + page.toLowerCase() + ".html", success);
+        $.get(config.base_url + "pages/" + page.toLowerCase() + ".html", success);
 
         function success(data){
             if ($inserted != null) {
@@ -116,11 +145,11 @@ function Init(){
             
             componentHandler.upgradeElements($("[data-content=inserted]"));
 
-            sectionFunc();
+            sectionFunc(url_data);
         }
     }
-
-    forceUpdate = loadPage;
+    
+    window.setPage = setPage
 
     constructor();
 }

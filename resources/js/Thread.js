@@ -3,7 +3,7 @@
  * @author Solomon Rubin (Serubin.net)
  */
 
-function Thread(conversation_id) {
+function Thread(data) {
     var $parent = $("[data-content=inserted]");
 
     // Page id
@@ -16,11 +16,18 @@ function Thread(conversation_id) {
     var initial_load        = true;
     var currently_displayed = [];
     
+    // Parameters
+    var conversation_id     = 0
+    var archived            = null;
+    if (data.length >= 1)
+        conversation_id     = data[0];
+
+    if (data.length >= 2 && data[1].toLowerCase() == "archived")
+        archived            = "true";
+
+    var title               = localStorage.getItem(conversation_id + "title");
 
     // Theming info
-    var conversation_id     = getUrlParameter("conversation_id");
-    var archived            = getUrlParameter("archived");
-    var title               = localStorage.getItem(conversation_id + "title");
     var color               = hasGlobalTheme() ? 
                                globalColor : 
                                 localStorage.getItem(conversation_id + "color");
@@ -73,12 +80,12 @@ function Thread(conversation_id) {
         $more_btn.show(); // Hide back button by default
         
         $back_btn.on('click', function() {
-            window.location.hash = "#!" + PAGE_LIST;
+            setPage(PAGE_LIST)
         });
 
         if (archived === 'true') {
             $back_btn.click(function() {
-                window.location.replace("archived.html");
+                setPage(PAGE_LIST + "/archived");
             });
             $archive_conver.html("Move to Inbox");
         }
@@ -207,6 +214,7 @@ function Thread(conversation_id) {
         
         refreshMessages();
         setTimeout(checkNewMessages, config.refresh_rate);
+        $msg_entry.focus();
     }
     
     function checkNewMessages() {
