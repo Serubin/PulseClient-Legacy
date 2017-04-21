@@ -52,38 +52,14 @@ function Init(){
             formatPhoneNumber(localStorage.getItem("phone_number"))
         );
 
+        enableTheme();
 
         $back_btn.hide(); // Hide back button by default
         $more_btn.hide(); // Hide back button by default
 
     }
     
-    /**
-     * Enables initial theme
-     */
-    function enableTheme() {
-         setGlobalColor();
-
-        var baseTheme = getBaseTheme();
-        if (baseTheme === "dark" || (baseTheme === "day_night" && isNight()) || baseTheme === "black") {
-            textClass = "mdl-color-text--white";
-            $('head').append('<link rel="stylesheet" href="resources/css/themed-dark.css" type="text/css" />');
-            $('.mdl-color-text--grey-900').addClass(textClass).removeClass('mdl-color-text--grey-900');
-
-            if (baseTheme === "black") {
-                $('head').append('<link rel="stylesheet" href="resources/css/themed-black.css" type="text/css" />');
-            }
-        } else {
-            textClass = "mdl-color-text--grey-900";
-        }
-   
-        $(".empty").css("background-color", globalColor);
-        $(".mdl-layout__header").css("background-color", globalColor);
-        $(".mdl-color--primary").css("background-color", globalColor);
-        $("#nav-drawer-title").css("background-color", globalColorDark);
-        $("#nav-drawer-subtitle").css("background-color", globalColorDark);
-        $("#compose").css("background-color", globalColorAccent);
-    }
+    
     
     function setPage(url, push_state) {
         if(typeof push_state == "undefined" || push_state)
@@ -110,7 +86,7 @@ function Init(){
 
 
         // Do nothing if the page is the same
-        if(page === last_page)
+        if(window.location.pathname === last_page)
             return;
 
         // Handle index
@@ -118,7 +94,7 @@ function Init(){
             page = PAGE_LIST;
 
         // Update  variables on page load
-        last_page    = page;
+        last_page = window.location.pathname;
         
             
         // Redirect to login if token isn't set.

@@ -59,6 +59,8 @@ function Thread(data) {
     
     function constructor() {
         
+        Conversations(null, $("#side-menu-insert"));
+
         page_id = "thread" + conversation_id + new Date();
         current_page_id = page_id;
 
@@ -89,7 +91,7 @@ function Thread(data) {
             });
             $archive_conver.html("Move to Inbox");
         }
-        
+
         // EVENTS
         //TODO on focus, up the refresh amount and refresh immidately
         //TODO on blur, reduce

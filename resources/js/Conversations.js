@@ -13,6 +13,10 @@ function Conversations(data, $elem) {
     var $refresh_btn        = $("#refresh-button");
 
     function constructor() {
+        
+        if ($("[data-conversation-list=true]").length > 0 )
+            $("[data-conversation-list=true]").remove();
+
         page_id = "conversationlist" + new Date();
         current_page_id = page_id;
 
@@ -173,13 +177,10 @@ function Conversations(data, $elem) {
                     setPage(PAGE_THREAD + "/"
                         + event.data.deviceId 
                         + (event.data.archived ? "/archived" : ""));
-
-                if (page == PAGE_THREAD)
-                    forceUpdate();
                 
             });
         }
-        console.log("Called!");
+
         componentHandler.upgradeElements($elem);
     }
 
