@@ -45,6 +45,7 @@ function Thread(data) {
     var $msg_entry          = $("#message-entry");
     var $send_btn           = $("#send-button");
     var $refresh_btn        = $("#refresh-button");
+    var $expand_btn         = $("#expand-btn");
     var $mlist_wrap         = $("#message-list-wrapper");
     var $msg_list           = $("#message-list");
     var $archive_conver     = $("#archive-conversation");
@@ -80,6 +81,7 @@ function Thread(data) {
         
         $back_btn.show(); // Hide back button by default
         $more_btn.show(); // Hide back button by default
+        $expand_btn.hide() // Show expand button by default
         
         $back_btn.on('click', function() {
             setPage(PAGE_LIST)

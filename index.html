@@ -58,6 +58,9 @@
                 <a id="back-button" class="back mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
                     <i class="material-icons">arrow_back</i>
                 </a>
+                <div aria-expanded="false" role="button" tabindex="0" class="mdl-layout__drawer-button mdl-layout--large-screen-only" id="expand-btn" style="position: relative;">
+                    <i class="material-icons"></i>
+                </div>
                 <span class="mdl-layout-title" id="toolbar-title">Pulse</span>
                 <div class="mdl-layout-spacer"></div>
                 <a id="refresh-button" class="refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
@@ -80,7 +83,7 @@
                 </ul>
             </div>
         </header>
-        <div class="mdl-layout__drawer mdl-layout--large-screen-only mdl-navigation-messages">
+        <div class="mdl-layout__drawer mdl-layout--large-screen-only mdl-navigation-messages" id="side-menu">
             <span class="mdl-layout-title" id="nav-drawer-title"></span>
             <span class="mdl-layout-title" id="nav-drawer-subtitle"></span>
             <nav class="mdl-navigation-messages" id="side-menu-insert">

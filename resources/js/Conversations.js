@@ -7,6 +7,7 @@ function Conversations(data, $elem) {
         $elem = $("#conversation-list");
 
 
+    var $expand_btn         = $("#expand-btn");
     var $toolbar_title      = $("#toolbar-title");
     var $navd_title         = $("#nav-drawer-title");
     var $navd_subtitle      = $("#nav-drawer-subtitle");
@@ -15,10 +16,15 @@ function Conversations(data, $elem) {
     function constructor() {
         
         if ($("[data-conversation-list=true]").length > 0 )
-            $("[data-conversation-list=true]").remove();
+            $("[data-conversation-list=true]").html("")
+                    .removeAttr("data-conversations-list");
 
         page_id = "conversationlist" + new Date();
         current_page_id = page_id;
+
+        $back_btn.hide(); // Hide back button by default
+        $more_btn.hide(); // Hide back button by default
+        $expand_btn.css("display", "") // Show expand button by default
 
         // Set page title
         document.title = "Pulse";

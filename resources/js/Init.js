@@ -23,6 +23,8 @@ $(Init);
 
 function Init(){
 
+    var $expand_btn         = $("#expand-btn");
+    var $side_menu          = $("#side-menu");
     var $navd_title         = $("#nav-drawer-title");
     var $navd_subtitle      = $("#nav-drawer-subtitle");
     var $content            = $("#content");
@@ -56,7 +58,18 @@ function Init(){
 
         $back_btn.hide(); // Hide back button by default
         $more_btn.hide(); // Hide back button by default
+        $expand_btn.hide() // Hide expand button by default
+        
 
+        setTimeout(function() {
+            expand_sib = $expand_btn.siblings()[0];
+            $expand_btn.removeClass("mdl-layout--large-screen-only")
+                    .addClass("mdl-layout--small-screen-only")
+                    .detach().prependTo(expand_sib);
+
+            $side_menu.css("display", "");
+
+        }, 250)
     }
     
     
