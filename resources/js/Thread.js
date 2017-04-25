@@ -104,18 +104,17 @@ function Thread(data) {
         });
 
         // On Drag/Dropa events 
-        $parent.on('drag dragstart dragend dragover dragenter dragleave drop', '#message-list-wrapper', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        })
-        .on('dragover dragenter', '#message-list-wrapper' ,function() {
-            $draggable.addClass("is-dragover");
-        })
-        .on('dragleave dragend drop', '#message-list-wrapper', function() {
-            $draggable.removeClass("is-dragover");
-        })
-        .on('drop','#message-list-wrapper', dropListener);
-
+        $mlist_wrap.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            })
+        .on('dragover dragenter', function() {
+                $draggable.addClass("is-dragover");
+            })
+        .on('dragleave dragend drop', function() {
+                $draggable.removeClass("is-dragover");
+            })
+        .on('drop', dropListener);
 
         // Delete button event
         $parent.on('click', '#delete-button', function() {
@@ -216,6 +215,20 @@ function Thread(data) {
             }
         });
         
+        $parent.on('click', '#emoji', function(e) {
+            e.preventDefault();
+            $msg_entry.emojiPicker({button: false});
+            $msg_entry.emojiPicker("toggle");
+        });
+
+        $parent.on('click', '#attach', function(e) {
+            e.preventDefault();
+            var input = $(document.createElement('input'));
+            input.attr("type", "file");
+            input.trigger('click');
+            input.change(dropListener);
+        });
+
         refreshMessages();
         setTimeout(checkNewMessages, config.refresh_rate);
         $msg_entry.focus();
