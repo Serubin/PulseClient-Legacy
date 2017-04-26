@@ -13,5 +13,5 @@ var config = {
     },
 }
 
-
-firebase.initializeApp(config.firebase_config);
+if (typeof firebase != "undefined")
+    firebase.initializeApp(config.firebase_config);

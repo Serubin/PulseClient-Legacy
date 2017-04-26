@@ -76,6 +76,8 @@ function Thread(data) {
         $navd_title.css("background-color", colorDark);
         $navd_subtitle.css("background-color", colorDark);
         $send_btn.css("background-color", colorAccent);
+
+        // TODO stop appending, modify instead
         $("head").append("<meta name=\"theme-color\" content=\"" + colorDark + "\">")
     
         

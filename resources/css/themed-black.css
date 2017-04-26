@@ -1,0 +1,7 @@
+.mdl-layout__content, .mdl-navigation-messages {
+    background: #000000;
+}
+
+.mdl-layout__drawer, .send-bar-content, .conversation-card.mdl-card {
+	  background: #000000;
+}

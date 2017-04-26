@@ -8,10 +8,18 @@ function Conversations(data, $elem) {
 
 
     var $expand_btn         = $("#expand-btn");
+    var $toolbar            = $("#toolbar");
     var $toolbar_title      = $("#toolbar-title");
     var $navd_title         = $("#nav-drawer-title");
     var $navd_subtitle      = $("#nav-drawer-subtitle");
     var $refresh_btn        = $("#refresh-button");
+
+    var color               = hasGlobalTheme() ? 
+                               globalColor : "#2196F3";
+    var colorDark           = hasGlobalTheme() ? 
+                               globalDarkColor : "#1565C0";
+    var colorAccent         = hasGlobalTheme() ? 
+                               globalAccentColor :  "#FF6E40" ;
 
     function constructor() {
         
@@ -25,6 +33,11 @@ function Conversations(data, $elem) {
         $back_btn.hide(); // Hide back button by default
         $more_btn.hide(); // Hide back button by default
         $expand_btn.css("display", "") // Show expand button by default
+
+        // Set colors
+        $toolbar.css("background-color", color);
+        $navd_title.css("background-color", colorDark);
+        $navd_subtitle.css("background-color", colorDark);
 
         // Set page title
         document.title = "Pulse";

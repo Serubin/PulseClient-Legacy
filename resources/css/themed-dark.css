@@ -1,0 +1,48 @@
+.mdl-layout__drawer, .send-bar-content, .conversation-card.mdl-card,
+.sent, .message {
+    background: #202B30;
+}
+
+.mdl-layout__content, .mdl-navigation-messages, .compose-card, .adding-card, .edit-card {
+    background: #374248;
+}
+
+.conversation-title.mdl-card__supporting-text, .mdl-color-text--grey-900,
+.mdl-textfield__input, .mdl-textfield__label, .empty-text {
+	  color: white;
+}
+
+.sent:after {
+  border-color: #202B30 transparent;
+}
+
+.conversation-snippet.mdl-card__supporting-text, .mdl-color-text--grey-600 {
+	  color: rgba(255,255,255,.77);
+}
+
+.item:hover {
+	  background: #202020;
+}
+
+.click-item:hover {
+	  background: #202020;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+::-webkit-scrollbar-track {
+  	border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+}
+ 
+::-webkit-scrollbar-thumb {
+  	border-radius: 10px;
+    background: #202b30;  
+    outline: 1px solid slategrey;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #555;  
+}

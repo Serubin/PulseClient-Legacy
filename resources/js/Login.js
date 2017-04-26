@@ -3,6 +3,9 @@ function Login() {
     var $login      = $("#login");
 
     function constructor() {
+
+
+
         $login.on('click', function() {
             username = $("#username").val();
             password = $("#password").val();
@@ -39,7 +42,7 @@ function Login() {
         if (getUrlParameter("activate") == "true") {
             window.location.replace("activate.html"); //TODO fix urls
         } else {
-            window.location.hash = "#!" + PAGE_LIST;
+            setPage(PAGE_LIST)
         }
     }
 

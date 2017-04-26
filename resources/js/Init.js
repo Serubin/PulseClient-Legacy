@@ -38,6 +38,7 @@ function Init(){
     $(window).on('popstate', loadPage);
 
     function constructor() {
+
         if (account_id == null) 
             setPage(config.base_url + PAGE_LOGIN);
         else {
@@ -48,6 +49,9 @@ function Init(){
             sjcl.beware["CBC mode is dangerous because it doesn't protect message integrity."]();
         }   
         
+        if(window.location.pathname.split('/')[0] == "image")
+            return;
+
         // Set up base title
         $navd_title.html(localStorage.getItem("name"));
         $navd_subtitle.html(
@@ -114,6 +118,8 @@ function Init(){
         if(account_id == null && page != PAGE_LOGIN) 
             return setPage(PAGE_LOGIN);
 
+        if(account_id != null && page == PAGE_LOGIN) 
+            return setPage(PAGE_LIST);
         
         var sectionFunc = window[page.ucFirst()]; // Get function
         if(typeof sectionFunc != "function") // Exec function

@@ -58,7 +58,7 @@ var loadImage = function(deviceId, accountId, mimeType, prepend) {
                     console.log("Got media!");
 
                     if (mimeType.startsWith("image/")) {
-                        var link = "image.html?mime_type=" + mimeType + "&device_id=" + deviceId + "&account_id=" + accountId;
+                        var link = "/image.html?mime_type=" + mimeType + "&device_id=" + deviceId + "&account_id=" + accountId;
                         $("#" + deviceId).html(prepend + "<a href=\"" + link + "\" target=\"_blank\"><img class=\"media\" src=\"data:" + mimeType + ";base64," + imgFile + "\"/></a>")
                     } else if (mimeType.startsWith("video/")) {
                         $("#" + deviceId).html(prepend + "<video controls class=\"media\" src=\"data:" + mimeType + ";base64," + imgFile + "\"/>")

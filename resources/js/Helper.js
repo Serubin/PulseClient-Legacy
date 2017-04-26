@@ -115,7 +115,7 @@ function toColor(num) {
 }
 
 function getUrlParameter(sParam) {
-    var sPageURL = decodeURIComponent(window.location.hash.split('?')[1]),
+    var sPageURL = decodeURIComponent(window.location.href.split('?')[1]),
         sURLVariables = sPageURL.split('&'),
         sParameterName,
         i;

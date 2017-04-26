@@ -1,0 +1,54 @@
+<!doctype html>
+<!--
+  Copyright 2016 Jake Klinker
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Pulse">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Pulse</title>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#00695C">
+    <link rel="icon" sizes="192x192" href="/resources/images/android-desktop.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Pulse">
+    <link rel="apple-touch-icon-precomposed" href="/resources/images/ios-desktop.png">
+    <link rel="shortcut icon" href="/resources/images/favicon.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="/vendors/encryption/sjcl.js"></script>
+    <script src="/vendors/encryption/hmacsha1.js"></script>
+    <script src="/resources/App.js"></script>
+    <style>
+      .media {
+        width: 750px;
+      }
+    </style>
+</head>
+
+<body>
+    <script>
+        var deviceId = getUrlParameter("device_id");
+        var accountId = getUrlParameter("account_id");
+        var mimeType = getUrlParameter("mime_type");
+        $("body").html("<div class=\"media\" id=\"" + deviceId + "\"></div>");
+        loadImage(deviceId, accountId, mimeType);
+    </script>
+</body>
+
+</html>
