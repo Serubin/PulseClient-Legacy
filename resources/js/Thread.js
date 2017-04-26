@@ -28,6 +28,8 @@ function Thread(data) {
 
     // static options
     var latestTimestamp     = 0;
+    var current_timeout
+    var refresh_rate        = config.refresh_rate_low;
     
     // global tracking vars
     var initial_load        = true;
@@ -114,12 +116,19 @@ function Thread(data) {
         }
 
         // EVENTS
-        //TODO on focus, up the refresh amount and refresh immidately
-        //TODO on blur, reduce
-        //TODO these changes assume someone is using the chrome extention for notifications
+        //
         // Window events    
         $(window).on('focus', function() {
+            clearTimeout(current_timeout)
+            refresh_rate = config.refresh_rate_low
+            checkNewMessages()
             $msg_entry.focus();
+        });
+
+        $(window).on('blur', function() {
+            clearTimeout(current_timeout)
+            refresh_rate = config.refresh_rate_high
+            current_timeout = setTimeout(checkNewMessages, refresh_rate)
         });
 
         // On Drag/Dropa events 
@@ -214,7 +223,11 @@ function Thread(data) {
             }
 
             return true;
-        })
+        });
+
+        $parent.on('focus', '#message-entry',  function(event) {
+            dismissNotification()
+        });
 
         $msg_entry.autoGrow({extraLine: false});
         
@@ -249,7 +262,7 @@ function Thread(data) {
         });
 
         refreshMessages();
-        setTimeout(checkNewMessages, config.refresh_rate);
+        setTimeout(checkNewMessages, refresh_rate);
         $msg_entry.focus();
     }
     
@@ -267,8 +280,7 @@ function Thread(data) {
                         && !currently_displayed.contains(data[0].device_id))
                     refreshMessages();
             });
-
-        setTimeout(checkNewMessages, config.refresh_rate);
+        current_timeout = setTimeout(checkNewMessages, refresh_rate);
     }
 
     /**
@@ -552,7 +564,6 @@ function Thread(data) {
                     && data[i].message_from.length) != 0 
                     && data[i].message_type == 0 ) {
                 var $from = $("<b>" + data[i].message_from + ":</b><br/>")
-                console.log(msg_content);
                 msg_content.prepend($from);
             }
 
