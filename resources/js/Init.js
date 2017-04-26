@@ -50,7 +50,6 @@ function Init(){
     $back_btn               = $("#back-button");
     $more_btn               = $("#more-button");
 
-    $(window).on('load', loadPage);
     $(window).on('hashchange', loadPage);
     $(window).on('popstate', loadPage);
 
@@ -91,6 +90,8 @@ function Init(){
             $side_menu.css("display", "");
 
         }, 250)
+
+        loadPage();
     }
     
     
