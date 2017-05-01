@@ -16,25 +16,32 @@
  */
 
 function Login() {
+
+    var $parent     = $("[data-content=inserted]");
+    var $username   = $("#username");
     var $password   = $("#password");
     var $login      = $("#login");
 
     function constructor() {
 
 
+        $parent.on('click', '#login', do_login);
 
-        $login.on('click', function() {
+        $password.on('keyup', login_keyup);
+
+        function do_login() {
             username = $("#username").val();
             password = $("#password").val();
             $.post(getBaseUrl() + "/api/v1/accounts/login", { username: username, password: password })
                 .done(store_data)
-                .fail(failed_login);
-        });
+                .fail(failed_login)
+                .statusCode;
 
-        $login.on('keyup', function(event){
-            if(event.keyCode == 13)
-                $login.click();
-        });
+        }
+        function login_keyup(e) {
+            if(e.keyCode == 13)
+                do_login()
+        }
     }
 
     function store_data(data) {
@@ -51,9 +58,11 @@ function Login() {
         localStorage.setItem("rounder_bubbles", data.rounder_bubbles + "");
             
 
-        combinedKey     = account_id + ":" + localStorage.getItem("hash") + "\n";
+        combinedKey     = data.account_id + ":" + localStorage.getItem("hash") + "\n";
         key             = sjcl.misc.pbkdf2(combinedKey, localStorage.getItem("salt"), 10000, 256, hmacSHA1);
         aes             = new sjcl.cipher.aes(key);
+        account_id      = data.account_id;
+
         sjcl.beware["CBC mode is dangerous because it doesn't protect message integrity."]();
 
         if (getUrlParameter("activate") == "true") {
