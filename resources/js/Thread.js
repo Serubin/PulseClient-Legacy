@@ -506,7 +506,7 @@ function Thread(data) {
 
             // If text message
             if (mimeType == "text/plain") {
-                //TODO move to after all the ifs
+
                 msg_content = message.data.replace(/\n/g, "<br />");
                 
             } else if (mimeType == "media/youtube") { // If youtube
@@ -516,7 +516,7 @@ function Thread(data) {
 
                 youtubeLink = "https://youtube.com/watch?v=" + youtubeLink;
                 
-                var msg_content = $("<a></a>").attr("href", youtubeLink)
+                msg_content = $("<a></a>").attr("href", youtubeLink)
                                 .attr("target", "_blank");
                 var $img = $("<img />").addClass("media")
                                 .attr("src", message.data);
@@ -525,7 +525,7 @@ function Thread(data) {
             } else if (mimeType == "media/youtube-v2") {
                 var json = JSON.parse(message.data);
 
-                var msg_content = $("<a></a>").attr("href", json.url)
+                msg_content = $("<a></a>").attr("href", json.url)
                                 .attr("target", "_blank");
                 var $img = $("<img />").addClass("media")
                                 .attr("src", json.thumbnail);
@@ -538,7 +538,7 @@ function Thread(data) {
                 try {
                     var json = JSON.parse(message.data);
 
-                    var msg_content = $("<a></a>").attr("href", json.url)
+                    msg_content = $("<a></a>").attr("href", json.url)
                                     .attr("target", "_blank");
                     var $img = $("<img />").addClass("media")
                                     .attr("src", json.thumbnail);
@@ -560,11 +560,17 @@ function Thread(data) {
                 msg_is_mms = true;
             }
 
-            if ((data[i].message_from != null 
-                    && data[i].message_from.length) != 0 
-                    && data[i].message_type == 0 ) {
-                var $from = $("<b>" + data[i].message_from + ":</b><br/>")
-                msg_content.prepend($from);
+            // TODO do like date wrapper - also color message to contact?
+            if ((message.message_from != null 
+                    && message.message_from.length) != 0 
+                    && message.message_type == 0 ) {
+                var $from = $("<b>" + message.message_from + ":</b><br/>");
+
+                if(typeof msg_content == "string") // If string
+                    msg_content = $('<div>').append($from.clone()).html() + 
+                        msg_content;
+                else
+                    msg_content.prepend($from);
             }
 
             var $message = messageFactory(message.device_id, 
