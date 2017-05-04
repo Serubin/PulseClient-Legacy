@@ -24,7 +24,6 @@ function Login() {
 
     function constructor() {
 
-
         $parent.on('click', '#login', do_login);
 
         $password.on('keyup', login_keyup);

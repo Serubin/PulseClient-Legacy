@@ -45,7 +45,15 @@ function Init(){
     var $navd_title         = $("#nav-drawer-title");
     var $navd_subtitle      = $("#nav-drawer-subtitle");
     var $content            = $("#content");
-    var $inserted           = null
+    var $toolbar            = $("#toolbar");
+    var $navd_title         = $("#nav-drawer-title");
+    var $navd_subtitle      = $("#nav-drawer-subtitle");
+    var $inserted           = null;
+
+    var color               =  "#2196F3";
+    var colorDark           =  "#1565C0";
+    var colorAccent         =  "#FF6E40" ;
+
     account_id              = localStorage.getItem("account_id");
     $back_btn               = $("#back-button");
     $more_btn               = $("#more-button");
@@ -54,6 +62,13 @@ function Init(){
     $(window).on('popstate', loadPage);
 
     function constructor() {
+
+        // Set colors
+        $toolbar.css("background-color", color);
+        $navd_title.css("background-color", colorDark);
+        $navd_subtitle.css("background-color", colorDark);
+
+        $("meta[name=theme-color]").attr("content", colorDark);
 
         if (account_id == null) 
             setPage(config.base_url + PAGE_LOGIN);

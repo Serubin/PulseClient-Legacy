@@ -80,6 +80,7 @@ function Thread(data) {
     function constructor() {
         
         Conversations(null, $("#side-menu-insert"));
+        $("[data-conversation-list=inserted]").off(); 
 
         page_id = "thread" + conversation_id + new Date();
         current_page_id = page_id;
@@ -96,9 +97,7 @@ function Thread(data) {
         $navd_subtitle.css("background-color", colorDark);
         $send_btn.css("background-color", colorAccent);
 
-        // TODO stop appending, modify instead
-        $("head").append("<meta name=\"theme-color\" content=\"" + colorDark + "\">")
-    
+        $("meta[name=theme-color]").attr("content", colorDark);
         
         $back_btn.show(); // Hide back button by default
         $more_btn.show(); // Hide back button by default
@@ -132,7 +131,7 @@ function Thread(data) {
         });
 
         // On Drag/Dropa events 
-        $mlist_wrap.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+        $mlist_wrap.off().on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
             })
@@ -145,7 +144,7 @@ function Thread(data) {
         .on('drop', dropListener);
 
         // Delete button event
-        $parent.on('click', '#delete-button', function() {
+        $delete_btn.off().on('click', function() {
             showConfirmDialog("Are you sure you want to delete this conversation?", function() {
             var url = getBaseUrl() 
                     + "/api/v1/conversations/remove/" 
@@ -158,7 +157,7 @@ function Thread(data) {
         });
         
         // Archive convo button
-        $parent.on('click', '#archive-conversation', function() {
+        $archive_conver.off().on('click', function() {
             if (archived === 'true') {
                 var url = getBaseUrl() 
                     + "/api/v1/conversations/unarchive/" 
@@ -179,11 +178,11 @@ function Thread(data) {
         });
         
         // Refresh messages event
-        $parent.on('click', '#refresh-button', function() {
+        $refresh_btn.off().on('click', function() {
             $msg_list.html("<div class=\"spinner\" id=\"loading\">"
                 + "<div class=\"mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active\"></div>"
                 + "</div>");
-            
+
             // Reset load/currently displayed
             initial_load = true;
             currently_displayed = []
@@ -568,7 +567,7 @@ function Thread(data) {
 
                 if(typeof msg_content == "string") // If string
                     msg_content = $('<div>').append($from.clone()).html() + 
-                        msg_content;
+                        msg_content; // Dirty fix
                 else
                     msg_content.prepend($from);
             }

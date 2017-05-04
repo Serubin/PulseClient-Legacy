@@ -21,6 +21,7 @@ function Conversations(data, $elem) {
     if(typeof $elem == "undefined") 
         $elem = $("#conversation-list");
 
+    var $parent = $("[data-content=inserted]");
 
     var $expand_btn         = $("#expand-btn");
     var $toolbar            = $("#toolbar");
@@ -54,6 +55,8 @@ function Conversations(data, $elem) {
         $navd_title.css("background-color", colorDark);
         $navd_subtitle.css("background-color", colorDark);
 
+        $("meta[name=theme-color]").attr("content", colorDark);
+
         // Set page title
         document.title = "Pulse";
         $toolbar_title.html("Pulse");
@@ -62,12 +65,13 @@ function Conversations(data, $elem) {
             formatPhoneNumber(localStorage.getItem("phone_number"))
         );
 
-        $refresh_btn.click(function() {
+        $refresh_btn.on('click', function() {
             $elem.empty();
             $elem.html("<div class=\"spinner\" id=\"loading\">"
                 + "<div class=\"mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active\"></div>"
                 + "</div>");
             
+
             refreshConversations();
         });
 
