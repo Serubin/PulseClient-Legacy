@@ -29,6 +29,7 @@ function Conversations(data, $elem) {
     var $navd_title         = $("#nav-drawer-title");
     var $navd_subtitle      = $("#nav-drawer-subtitle");
     var $refresh_btn        = $("#refresh-button");
+    var $compose_btn        = $("#compose");
 
     var color               = hasGlobalTheme() ? 
                                globalColor : "#2196F3";
@@ -38,7 +39,9 @@ function Conversations(data, $elem) {
                                globalAccentColor :  "#FF6E40" ;
 
     function constructor() {
-        
+    
+        $refresh_btn.off();
+
         if ($("[data-conversation-list=true]").length > 0 )
             $("[data-conversation-list=true]").html("")
                     .removeAttr("data-conversations-list");
@@ -74,6 +77,10 @@ function Conversations(data, $elem) {
 
             refreshConversations();
         });
+
+        $compose_btn.on('click', function() {
+            setPage(PAGE_COMPOSE);
+        })
 
         refreshConversations();
     }

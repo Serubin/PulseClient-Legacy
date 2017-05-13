@@ -9,6 +9,11 @@
     width: 100%;
 }
 
+
+#recipient {
+    border-bottom: 1px solid rgba(0,0,0,0);
+}
+
 #compose-head {
     width: 100%;
     height: 60px;
@@ -37,4 +42,6 @@
     background-color: #b3d4fc;
 }
 
-
+.contact-chip.error {
+    background-color: #d23f31 !important;
+}

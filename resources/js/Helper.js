@@ -217,3 +217,7 @@ Array.prototype.contains = function(element) {
 String.prototype.ucFirst = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
+
+Object.size = function(obj) {
+    return Object.keys(obj).length;
+}

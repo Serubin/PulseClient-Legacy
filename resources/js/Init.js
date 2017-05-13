@@ -18,6 +18,7 @@
 // CONST
 var PAGE_LOGIN      = "login";
 var PAGE_THREAD     = "thread";
+var PAGE_COMPOSE    = "compose";
 var PAGE_LIST       = "conversations";
 
 var $content;
@@ -69,6 +70,10 @@ function Init(){
         $navd_subtitle.css("background-color", colorDark);
 
         $("meta[name=theme-color]").attr("content", colorDark);
+
+        $("style").remove(); // Enables snack bars
+        $(".mdl-snackbar")
+            .attr("style", "display: flex !important");
 
         if (account_id == null) 
             setPage(config.base_url + PAGE_LOGIN);
