@@ -17,12 +17,18 @@
 
 function Login() {
 
-    var $parent     = $("[data-content=inserted]");
-    var $username   = $("#username");
-    var $password   = $("#password");
-    var $login      = $("#login");
+    var $parent             = $("[data-content=inserted]");
+    var $username           = $("#username");
+    var $password           = $("#password");
+    var $login              = $("#login");
+    var $navd_title         = $("#nav-drawer-title");
+    var $navd_subtitle      = $("#nav-drawer-subtitle");
 
     function constructor() {
+        
+
+        $navd_title.html("Pulse");
+        $navd_subtitle.html("Please login");
 
         $parent.on('click', '#login', do_login);
 

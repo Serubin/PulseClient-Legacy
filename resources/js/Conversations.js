@@ -67,6 +67,8 @@ function Conversations(data, $elem) {
         $navd_subtitle.html(
             formatPhoneNumber(localStorage.getItem("phone_number"))
         );
+        
+        Nav();
 
         $refresh_btn.on('click', function() {
             $elem.empty();

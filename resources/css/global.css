@@ -43,6 +43,10 @@
   border-right: none;
 }
 
+.mdl-navigation {
+    padding-top: 0px !important;
+}
+
 @media screen and (min-width: 600px) {
     .page-content {
         padding: 16px;
