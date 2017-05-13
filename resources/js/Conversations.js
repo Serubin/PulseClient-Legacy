@@ -15,11 +15,14 @@
  *  limitations under the License.
  */
 
-function Conversations(data, $elem) {
+function Conversations(data, elem) {
     var page_id;
+    var $elem;
 
-    if(typeof $elem == "undefined") 
+    if(typeof elem == "undefined") 
         $elem = $("#conversation-list");
+    else
+        $elem = elem;
 
     var $parent = $("[data-content=inserted]");
 
@@ -68,7 +71,8 @@ function Conversations(data, $elem) {
             formatPhoneNumber(localStorage.getItem("phone_number"))
         );
         
-        Nav();
+        if(typeof elem == "undefined") 
+            Nav();
 
         $refresh_btn.on('click', function() {
             $elem.empty();
