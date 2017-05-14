@@ -1,4 +1,4 @@
-# PulseSMS Web Client
+# PulseClient for PulseSMS
 This project is a remake of the original KlinkerApp PulseSMS web client. It's based on the original Open Source (Apache License) implementation. It aims to help fix some of the short comings of the original app as outlined below under **Features**. 
 
 The original app is located at [messenger.klinkerapps.com](https://messenger.klinkerapps.com/). The current hosted version of this app is located at [pulse.serubin.net](https://pulse.serubin.net). 
@@ -24,3 +24,5 @@ Like the original app, this version does not save any data onto the host server.
 ## Installation
 grunt/grunt-cli is required for installation. Run `npm install` to download the dependencies and then `grunt build` to "compile" the javascript.
 
+## License
+The original code is proved under the Apache 2.0 license and PulseClient is distributed under the same license as found in the LICENSE file as well as at the top of each file.
