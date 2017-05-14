@@ -45,4 +45,4 @@ This goes under the `server` block and must be run at the root of a domain (or s
 ```
 
 ## License
-The original code is proved under the Apache 2.0 license and PulseClient is distributed under the same license as found in the LICENSE file as well as at the top of each file.
+The original code is provided under the Apache 2.0 license and PulseClient is distributed under the same license as found in the LICENSE file as well as at the top of each file.
