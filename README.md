@@ -10,6 +10,14 @@ As previously mentioned, this app aims to fix some of the short comings of the o
 * New and improved compose new message page.
 * Improved logic
 
+## TODO
+* Archive pages
+* Scheduled messages
+* Blacklist 
+* Settings
+* Contact Management
+* Account Overview (My Account)
+
 ## Privacy
 Like the original app, this version does not save any data onto the host server. It's entirely client based.
 
