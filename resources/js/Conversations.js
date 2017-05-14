@@ -51,31 +51,31 @@ function Conversations(data, elem) {
             $("[data-conversation-list=true]").html("")
                     .removeAttr("data-conversations-list");
 
-        page_id = "conversationlist" + new Date();
-        current_page_id = page_id;
+        if(typeof elem == "undefined") {
+            page_id = "conversationlist" + new Date();
+            current_page_id = page_id;
 
-        $back_btn.hide(); // Hide back button by default
-        $more_btn.hide(); // Hide back button by default
-        $expand_btn.css("display", "") // Show expand button by default
+            $back_btn.hide(); // Hide back button by default
+            $more_btn.hide(); // Hide back button by default
+            $expand_btn.css("display", "") // Show expand button by default
 
-        // Set colors
-        $toolbar.css("background-color", color);
-        $navd_title.css("background-color", colorDark);
-        $navd_subtitle.css("background-color", colorDark);
+            // Set colors
+            $toolbar.css("background-color", color);
+            $navd_title.css("background-color", colorDark);
+            $navd_subtitle.css("background-color", colorDark);
 
-        $("meta[name=theme-color]").attr("content", colorDark);
+            $("meta[name=theme-color]").attr("content", colorDark);
 
-        // Set page title
-        document.title = "Pulse";
-        $toolbar_title.html("Pulse");
-        $navd_title.html(localStorage.getItem("name"));
-        $navd_subtitle.html(
-            formatPhoneNumber(localStorage.getItem("phone_number"))
-        );
-        
-        if(typeof elem == "undefined") 
+            // Set page title
+            document.title = "Pulse";
+            $toolbar_title.html("Pulse");
+            $navd_title.html(localStorage.getItem("name"));
+            $navd_subtitle.html(
+                formatPhoneNumber(localStorage.getItem("phone_number"))
+            );
+            
             Nav();
-
+        }
         $refresh_btn.on('click', function() {
             initial_load = true
             $elem.empty();

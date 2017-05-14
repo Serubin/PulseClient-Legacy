@@ -81,9 +81,7 @@ function Thread(data) {
     
     function constructor() {
         
-        Conversations(null, $("#side-menu-insert"));
-        $("[data-conversation-list=inserted]").off(); 
-
+        
         page_id = "thread" + conversation_id + new Date();
         current_page_id = page_id;
 
@@ -265,6 +263,9 @@ function Thread(data) {
         refreshMessages();
         setTimeout(checkNewMessages, refresh_rate);
         $msg_entry.focus();
+
+        Conversations(null, $("#side-menu-insert"));
+        $("[data-conversation-list=inserted]").off(); 
 
     }
     
