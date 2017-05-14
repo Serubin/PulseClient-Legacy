@@ -76,6 +76,8 @@ function Thread(data) {
     var $attach             = $("#attach");
     var $navd_title         = $("#nav-drawer-title");
     var $navd_subtitle      = $("#nav-drawer-subtitle");
+    var $side_menu          = $("#side-menu-insert");
+    var $convo_tab;
     
     function constructor() {
         
@@ -263,6 +265,7 @@ function Thread(data) {
         refreshMessages();
         setTimeout(checkNewMessages, refresh_rate);
         $msg_entry.focus();
+
     }
     
     function checkNewMessages() {
@@ -318,17 +321,11 @@ function Thread(data) {
     *
     */
     function sendMessage(id, data, mimeType) {
-        $conversation_snippet   = $("#conversation-snippet-" + conversation_id);
-        $conversation_title     = $("#conversation-title-" + conversation_id);
+
+        $convo_tab.prependTo("#side-menu-insert");
 
         var encrypted = encrypt(data);
         var snippetEncrypted = encrypt("You: " + data);
-
-        // Update conversation sidebar
-        $conversation_snippet.html("You: " + data);
-        $conversation_snippet.removeClass("bold");
-        $conversation_title.removeClass("bold");
-    
 
         // Create message for thread
         msg_class = "sent " + textClass + " " + msg_theme;
@@ -458,6 +455,9 @@ function Thread(data) {
         var $loading = $("#loading");
         if ($loading) 
             $loading.remove();
+
+        if(!initial_load)
+            $convo_tab.prependTo("#side-menu-insert");
 
         // Iterate through received messages
         for (var i = data.length - 1; i >= 0; i--) {
@@ -680,8 +680,35 @@ function Thread(data) {
 
         $("#message-list").append(html);
         currently_displayed.push(id)
+
+        if(typeof $conv_el == "undefined" || $conv_el.length == 0)
+            $convo_tab = $("#" + conversation_id);
+
+        updateConversation($convo_tab, html);
     }
- 
+
+    /**
+     * Updates single conversation item
+     * 
+     * @param $el - element
+     * @param snippet - text
+     * @param read - is read
+     */
+    function updateConversation($el, snippet) {
+        snippet = snippet.find(".message")
+
+        var sent = snippet.hasClass("sent")
+        snippet = snippet.html();
+
+        if(sent)
+            snippet = "You: " + snippet;
+
+        $el.find(".conversation-snippet").html(snippet);
+        
+        $el.find("span").removeClass("bold");
+
+    }
+
     function setVariables(data, status) {
         for (var i = 0; i < data.length; i++) {
             if (data[i].device_id == conversation_id) {

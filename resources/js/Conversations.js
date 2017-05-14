@@ -41,6 +41,8 @@ function Conversations(data, elem) {
     var colorAccent         = hasGlobalTheme() ? 
                                globalAccentColor :  "#FF6E40" ;
 
+    var initial_load = true;
+
     function constructor() {
     
         $refresh_btn.off();
@@ -75,6 +77,7 @@ function Conversations(data, elem) {
             Nav();
 
         $refresh_btn.on('click', function() {
+            initial_load = true
             $elem.empty();
             $elem.html("<div class=\"spinner\" id=\"loading\">"
                 + "<div class=\"mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active\"></div>"
@@ -92,9 +95,18 @@ function Conversations(data, elem) {
     }
 
     function refreshConversations() {
+
+        handle_ui = updateConversations
+        if(initial_load)
+            handle_ui = renderConversation
+        
         $.get(getBaseUrl() + "/api/v1/conversations/" + getIndex() + "?account_id=" + account_id)
-            .done(renderConversation)
+            .done(handle_ui)
             .fail(failed);
+
+        initial_load = false;
+
+        setTimeout(refreshConversations, config.refresh_rate_high);
     }
 
     function getIndex() { // TODO, archived support
@@ -167,7 +179,8 @@ function Conversations(data, elem) {
             $convo_wrap  = $("<div></div>").addClass("conversation-card mdl-card")
                             .addClass("mdl-shadow--2dp mdl-js-button")
                             .addClass("mdl-js-ripple-effect")
-                            .attr("id", convo.device_id);
+                            .attr("id", convo.device_id)
+                            .attr("data-timestamp", convo.timestamp);
 
             $icon       = "<svg class=\"contact-img\" height=\"48\" width=\"48\">"
                         + "<circle cx=\"24\" cy=\"24\" r=\"24\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
@@ -235,8 +248,37 @@ function Conversations(data, elem) {
         componentHandler.upgradeElements($elem);
     }
 
-    function updateConversation($elem) {
+    function updateConversations(data) {
+        for (var i = 0; i < data.length; i++) {
+            var convo = data[i];
+            var read_style      = convo.read ? "" : " bold";
 
+           
+            var $conv_el = $("#" + convo.device_id);
+            
+            // If unchanged, continue
+            if($conv_el.attr("data-timestamp") == convo.timestamp)
+                continue;
+
+
+            try { // Decrypt snippet
+                convo.snippet = decrypt(convo.snippet).replace(/<.*>/g, "");
+            } catch (err) {
+                convo.snippet = "";
+            }
+
+            // Update with snippet
+            $conv_el.find(".conversation-snippet").html(convo.snippet);
+            
+
+            // Read / not read
+            $conv_el.find("span").removeClass("bold");
+            if(read_style != "")
+                $conv_el.find("span").addClass("bold");
+
+            // Move to top
+            $conv_el.prependTo("#" + $elem.attr("id"));
+        }
     }
 
 

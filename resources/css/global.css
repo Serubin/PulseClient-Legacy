@@ -169,3 +169,20 @@
     bottom: 1px;
     height: 1px;
 }
+
+#footer {
+    padding: 15px;
+    margin: auto auto 0;
+}
+
+#footer p {
+    line-height: 10px;
+    font-size: 10px;
+    color: #757575;
+}
+
+
+#footer p a {
+    color: #757575;
+}
+
