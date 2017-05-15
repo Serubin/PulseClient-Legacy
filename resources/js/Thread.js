@@ -151,7 +151,7 @@ function Thread(data) {
                     + conversation_id + "?account_id=" + account_id
                 $.post(url)
                     .done(function(data) { 
-                        window.location.replace("conversations.html");  // TODO change this
+                        setPage(PAGE_LIST);
                     }).fail(failed);
             });
         });
@@ -164,7 +164,7 @@ function Thread(data) {
                     + conversation_id + "?account_id=" + account_id + "&archive=true"
                 $.post()
                     .done(function(data) { 
-                        window.location.replace("archived.html"); 
+                        window.location.replace(archive); 
                     }).fail(failed);
             } else {
                 var url = getBaseUrl() 
@@ -172,7 +172,7 @@ function Thread(data) {
                     + "?account_id=" + account_id + "&archive=true"
                 $.post()
                     .done(function(data) { 
-                        window.location.replace("conversations.html"); // TODO Change this
+                        setPage(PAGE_LIST);
                     }).fail(failed);
             }
         });
