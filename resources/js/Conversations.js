@@ -249,7 +249,7 @@ function Conversations(data, elem) {
     }
 
     function updateConversations(data) {
-        for (var i = 0; i < data.length; i++) {
+        for (var i = data.length - 1; i >= 0; i--) {
             var convo = data[i];
             var read_style      = convo.read ? "" : " bold";
 
@@ -269,6 +269,7 @@ function Conversations(data, elem) {
 
             // Update with snippet
             $conv_el.find(".conversation-snippet").html(convo.snippet);
+            $conv_el.attr("data-timestamp", convo.timestamp);
             
 
             // Read / not read

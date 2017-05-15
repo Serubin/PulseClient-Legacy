@@ -177,19 +177,6 @@ function Thread(data) {
             }
         });
         
-        // Refresh messages event
-        $refresh_btn.off().on('click', function() {
-            $msg_list.html("<div class=\"spinner\" id=\"loading\">"
-                + "<div class=\"mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active\"></div>"
-                + "</div>");
-
-            // Reset load/currently displayed
-            initial_load = true;
-            currently_displayed = []
-
-            dismissNotification()
-            refreshMessages();
-        });
         
         // On scroll - hides snackbar 
         $mlist_wrap.on('scroll', function(){
@@ -266,6 +253,21 @@ function Thread(data) {
 
         Conversations(null, $("#side-menu-insert"));
         $("[data-conversation-list=inserted]").off(); 
+
+        // Refresh messages event
+        $refresh_btn.off().on('click', function() {
+            $msg_list.html("<div class=\"spinner\" id=\"loading\">"
+                + "<div class=\"mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active\"></div>"
+                + "</div>");
+
+            // Reset load/currently displayed
+            initial_load = true;
+            currently_displayed = []
+
+            dismissNotification()
+            refreshMessages();
+        });
+
 
     }
     
