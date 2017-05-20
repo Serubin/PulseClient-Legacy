@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-function Conversations(data, elem) {
+function Conversations(data, elem, page) {
     var page_id;
     var $elem;
 
@@ -76,6 +76,12 @@ function Conversations(data, elem) {
             
             Nav();
         }
+        
+
+        if(typeof page != "undefined") {
+            page_id = page;
+        }
+
         $refresh_btn.on('click', function() {
             initial_load = true
             $elem.empty();
@@ -95,6 +101,9 @@ function Conversations(data, elem) {
     }
 
     function refreshConversations() {
+
+        if (current_page_id != page_id)
+            return;
 
         handle_ui = updateConversations
         if(initial_load)

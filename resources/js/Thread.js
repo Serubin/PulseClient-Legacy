@@ -251,7 +251,7 @@ function Thread(data) {
         setTimeout(checkNewMessages, refresh_rate);
         $msg_entry.focus();
 
-        Conversations(null, $("#side-menu-insert"));
+        Conversations(null, $("#side-menu-insert"), page_id);
         $("[data-conversation-list=inserted]").off(); 
 
         // Refresh messages event
