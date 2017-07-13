@@ -16,7 +16,7 @@
  */
 
 var globalColor, globalColorDark, globalColorAccent, textClass;
-    
+ 
 /**
  * Enables initial theme
  */
@@ -26,14 +26,28 @@ function enableTheme() {
     var baseTheme = getBaseTheme();
     if (baseTheme === "dark" || (baseTheme === "day_night" && isNight()) || baseTheme === "black") {
         textClass = "mdl-color-text--white";
-        $('head').append('<link rel="stylesheet" href="/resources/css/themed-dark.css" type="text/css" />');
+        $('head').append('<link rel="stylesheet" href="resources/css/themed-dark.css" type="text/css" />');
         $('.mdl-color-text--grey-900').addClass(textClass).removeClass('mdl-color-text--grey-900');
 
         if (baseTheme === "black") {
-            $('head').append('<link rel="stylesheet" href="/resources/css/themed-black.css" type="text/css" />');
+            drawerColor = "#000000";
+            $('head').append('<link rel="stylesheet" href="resources/css/themed-black.css" type="text/css" />');
+        } else {
+            drawerColor = "#29373d";
         }
     } else {
         textClass = "mdl-color-text--grey-900";
+        drawerColor = "#F5F5F5";
+    }
+
+    if (hasColoredToolbar()) {
+      $(".material-icons").addClass("material-icons-white");
+      $("#toolbar-title").css("color", "white");
+      $(".icon_logo").addClass("icon_logo_dark").removeClass("icon_logo");
+      $(".icon_menu_toggle").addClass("icon_menu_toggle_dark").removeClass("icon_menu_toggle");
+
+      var color = hasGlobalTheme() ? globalColor : "#009688";
+      $("#toolbar").css("background-color", color);
     }
 
     $(".empty").css("background-color", globalColor);
@@ -42,6 +56,11 @@ function enableTheme() {
     $("#nav-drawer-title").css("background-color", globalColorDark);
     $("#nav-drawer-subtitle").css("background-color", globalColorDark);
     $("#compose").css("background-color", globalColorAccent);
+}
+
+function hasColoredToolbar() {
+  var coloredToolbar = localStorage.getItem("colored_toolbar");
+  return typeof coloredToolbar !== "undefined" && coloredToolbar === "yes";
 }
 
 function hasGlobalTheme() {
@@ -148,5 +167,83 @@ function setGlobalColor() {
         globalColorDark = "#000000";
         globalColorAccent = "#00BFA5";
     }
+}
+
+
+// contants
+var MAIN_CONTENT_SIZE = 950;
+var MINI_VERSION_SIZE = 750;
+var SIDE_MENU_WIDTH = 269;
+
+$(window).on('resize', function () {
+	resizeMargins();
+});
+
+$(document).ready(function() {
+	resizeMargins();
+
+	$("#outside-side-menu").click(function() { $("#logo").click(); });
+});
+
+function resizeMargins() {
+	var margin = 0;
+	var windowWidth = $(window).width();
+	var windowHeight = $(window).height();
+
+	if (windowWidth > MAIN_CONTENT_SIZE) {
+		margin = (windowWidth - MAIN_CONTENT_SIZE) / 2;
+	}
+
+	$("#toolbar_inner").css("margin-left", margin + "px");
+	$("#all_holder").css("margin-left", margin + "px");
+	$("#side-menu").css("height", windowHeight + "px");
+	//$("#content").css("height", windowHeight + "px");
+
+	if (windowWidth < MINI_VERSION_SIZE) {
+		loadMiniVersion();
+	} else {
+		loadFullVersion();
+	}
+}
+
+function loadMiniVersion() {
+	var $logo_image = $("#logo-image");
+	$logo_image.removeClass(hasColoredToolbar() ? "icon_logo_dark" : "icon_logo");
+	$logo_image.addClass(hasColoredToolbar() ? "icon_menu_toggle_dark" : "icon_menu_toggle");
+	$logo_image.css("margin-top", "1px");
+
+	$("#side-menu").css("margin-left", "-269px");
+	$("#content").css("margin-left", "0px");
+
+	$("#logo").off().on("click", function() {
+		var $html = $("html");
+		var $sidemenu = $("#side-menu");
+		var $outside_sidemenu = $("#outside-side-menu");
+
+		if ($sidemenu.is(":visible")) {
+			$html.removeClass("side-menu_show");
+			$sidemenu.css("margin-left", "-269px");
+			$outside_sidemenu.hide();
+		} else {
+			$html.addClass("side-menu_show");
+			$sidemenu.css("margin-left", "0px");
+			$outside_sidemenu.show();
+		}
+	});
+}
+
+function loadFullVersion() {
+	$("html").removeClass("side-menu_show");
+	$("#content").css("margin-left", SIDE_MENU_WIDTH + "px");
+
+	$("#logo").show();
+    $("#side-menu").css("margin-left", "0px");
+	$("#side-menu_toggle").hide();
+	$("#side-menu_toggle").off();
+
+	var $logo_image = $("#logo-image");
+	$logo_image.removeClass(hasColoredToolbar() ? "icon_menu_toggle_dark" : "icon_menu_toggle");
+	$logo_image.addClass(hasColoredToolbar() ? "icon_logo_dark" : "icon_logo");
+	$logo_image.css("margin-top", "2px");
 }
 

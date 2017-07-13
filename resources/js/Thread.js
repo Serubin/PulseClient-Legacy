@@ -92,13 +92,15 @@ function Thread(data) {
 
         $toolbar_title.html(title);
 
-        $toolbar.css("background-color", color);
-        $navd_title.css("background-color", colorDark);
-        $navd_subtitle.css("background-color", colorDark);
-        $send_btn.css("background-color", colorAccent);
+        if(hasColoredToolbar()) {
+            $toolbar.css("background-color", color);
+            $navd_title.css("background-color", colorDark);
+            $navd_subtitle.css("background-color", colorDark);
+            $send_btn.css("background-color", colorAccent);
 
-        $("meta[name=theme-color]").attr("content", colorDark);
-        
+            $("meta[name=theme-color]").attr("content", colorDark);
+        }
+
         $back_btn.show(); // Hide back button by default
         $more_btn.show(); // Hide back button by default
         $expand_btn.hide() // Show expand button by default
@@ -251,7 +253,7 @@ function Thread(data) {
         setTimeout(checkNewMessages, refresh_rate);
         $msg_entry.focus();
 
-        Conversations(null, $("#side-menu-insert"), page_id);
+        Conversations(null, $("#side-menu-insert"), page_id, true);
         $("[data-conversation-list=inserted]").off(); 
 
         // Refresh messages event
@@ -611,13 +613,15 @@ function Thread(data) {
 
         $(".message").linkify();
         $(".linkified").css("color", colorAccent);
+        
+        $document = $("html");
 
         // Show scroll to bottom snackbar - don't interupt scrolling
         if (current_size != currently_displayed.length && !initial_load) {
 
             // If near bottom
-            if (!(($("#message-list").height() - $(window).height() - 400) > $("#message-list-wrapper").scrollTop())) {
-                scrollToBottom()
+            if (!(($document.height() - 400) > $document.scrollTop())) {
+                scrollToBottom(250)
                 return
             }
 
@@ -626,7 +630,7 @@ function Thread(data) {
                     message: 'New Message',
                     actionHandler: function(event) {
                         snackbarContainer.MaterialSnackbar.cleanup_(); // Hide snackbar
-                        scrollToBottom();
+                        scrollToBottom(250);
                     },
                     actionText: 'Show',
                     timeout: 60*60*60 // Hour timeout
@@ -634,7 +638,7 @@ function Thread(data) {
                 showSnackbar(data);
 
                 setTimeout(function(){ // If snackbar timeout, scroll to bottom
-                    scrollToBottom()
+                    scrollToBottom(250)
                 }, 60*60*60);
             }
         }

@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-function Conversations(data, elem, page) {
+function Conversations(data, elem, page, small) {
     var page_id;
     var $elem;
 
@@ -58,13 +58,15 @@ function Conversations(data, elem, page) {
             $back_btn.hide(); // Hide back button by default
             $more_btn.hide(); // Hide back button by default
             $expand_btn.css("display", "") // Show expand button by default
-
+            
             // Set colors
-            $toolbar.css("background-color", color);
-            $navd_title.css("background-color", colorDark);
-            $navd_subtitle.css("background-color", colorDark);
+            if(hasColoredToolbar()) {
+                $toolbar.css("background-color", color);
+                $navd_title.css("background-color", colorDark);
+                $navd_subtitle.css("background-color", colorDark);
 
-            $("meta[name=theme-color]").attr("content", colorDark);
+                $("meta[name=theme-color]").attr("content", colorDark);
+            }
 
             // Set page title
             document.title = "Pulse";
@@ -206,6 +208,21 @@ function Conversations(data, elem, page) {
             $snippet    = $("<span></span>").addClass("conversation-snippet mdl-card__supporting-text")
                             .addClass(read_style)
                             .html(convo.snippet);
+
+            if (small) {
+                $convo_wrap.addClass("conversation-card-small");
+                $convo_wrap.removeClass("mdl-shadow--2dp");
+                $text_wrap.addClass("conversation-text-small");
+                $title.addClass("conversation-title-small");
+                $snippet.addClass("conversation-snippet-small");
+                $icon = "<svg class=\"contact-img contact-img-small\" height=\"24\" width=\"24\">"
+                          + "<circle cx=\"12\" cy=\"12\" r=\"12\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
+                          + "</svg>";
+            } else {
+                $icon = "<svg class=\"contact-img\" height=\"48\" width=\"48\">"
+                          + "<circle cx=\"24\" cy=\"24\" r=\"24\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
+                          + "</svg>";
+            }
 
             $text_wrap.append($title, $break, $snippet);
             $convo_wrap.append($icon, $text_wrap);

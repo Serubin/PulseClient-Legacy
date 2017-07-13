@@ -71,10 +71,7 @@ p {
 .page-content {
     bottom: 0;
     margin-bottom: 54px;
-}
-
-.material-icons {
-    color: white;
+    margin-top: 54px;
 }
 
 .mdl-layout-title {
@@ -89,6 +86,7 @@ p {
     bottom: 0%;
     width: 100%;
     margin: auto;
+    transition: ease-in-out width 0.5s;
 }
 
 .send-bar-content {
@@ -180,81 +178,33 @@ p {
     margin-top: -4px;
 }
 
-@media screen and (min-width: 150px) {
-    .media, .media-video {
-        width: 310px;
-    }
-    .entry {
-        width: 50%;
-    }
-    .mdl-layout-title {
-        max-width: 200px;
-    }
+
+
+@media (min-width: 750px) {
+  .send-bar {
+    width: 500px;
+  }
 }
 
-@media screen and (min-width: 350px) {
-    .media, .media-video {
-        width: 310px;
-    }
-    .entry {
-        width: 60%;
-    }
-    .mdl-layout-title {
-        max-width: 300px;
-    }
+@media (min-width: 800px) {
+  .send-bar {
+    width: 550px;
+  }
 }
-
-@media screen and (min-width: 600px) {
-    .message, .message-round {
-        max-width: 372px;
-    }
-    .media, .media-video {
-        width: 372px;
-    }
-    .send-bar-content {
-        max-width: 600px;
-    }
-    .entry {
-        width: 75%;
-    }
-    .mdl-layout-title {
-        max-width: 500px;
-    }
+@media (min-width: 850px) {
+  .send-bar {
+    width: 600px;
+  }
 }
-
-@media screen and (min-width: 720px) {
-    .message, .message-round {
-        max-width: 436px;
-    }
-    .media, .media-video {
-        width: 436px;
-    }
-    .send-bar-content {
-        max-width: calc(100% - 272px);
-        min-width: 720px;
-    }
-    .entry {
-        width: 84%;
-    }
-    .mdl-layout-title {
-        max-width: 600px;
-    }
+@media (min-width: 900px) {
+  .send-bar {
+    width: 650px;
+  }
 }
-
-@media screen and (min-width: 1025px) {
-    .send-bar {
-        margin-left: -120px;
-    }
-    .mdl-layout-title {
-        max-width: 800px;
-    }
-}
-
-@media screen and (max-width: 1024px) {
-    .mdl-layout__header-row {
-        height: 56px;
-        padding: 0 16px 0 16px;
-    }
+@media (min-width:950px) {
+  .send-bar {
+    width: 650px;
+  }
 }
 
 .message:after {

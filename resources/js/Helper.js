@@ -199,10 +199,14 @@ function showConfirmDialog(message, func) {
 /**
  * Scrolls message wrapper to bottom
  */
-function scrollToBottom() {
-    var $message_wrap         = $("#message-list-wrapper");
+function scrollToBottom(speed) {
+    
+    if (typeof speed == "undefined")
+        speed = 0
 
-    $message_wrap.animate({"scrollTop": $('.mdl-layout__content')[0].scrollHeight}, 0);
+    var $document         = $("html");
+
+    $document.animate({"scrollTop": $document[0].scrollHeight}, speed);
 }
 
 /**

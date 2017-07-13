@@ -59,3 +59,31 @@
 	font-size: 14px;
 	padding: 0px 16px 24px 0px;
 }
+
+/* Small Versions to be added to the normal versions. Used in drawer. */
+.conversation-card-small.mdl-card {
+  min-height: 56px;
+  height: 56px;
+  background: #fafafa;
+}
+
+.contact-img-small {
+  width: 24px;
+  height: 24px;
+}
+
+.conversation-text-small {
+  margin-top: 9px;
+  height: 48px;
+  line-height: 15px;
+  white-space: nowrap;
+}
+
+.conversation-title-small.mdl-card__supporting-text {
+    font-size: 14px;
+}
+
+.conversation-snippet-small.mdl-card__supporting-text {
+    font-size: 13px;
+}
+

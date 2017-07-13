@@ -65,12 +65,13 @@ function Init(){
     function constructor() {
 
         // Set colors
-        $toolbar.css("background-color", color);
-        $navd_title.css("background-color", colorDark);
-        $navd_subtitle.css("background-color", colorDark);
+        if(hasColoredToolbar()) {
+            $toolbar.css("background-color", color);
+            $navd_title.css("background-color", colorDark);
+            $navd_subtitle.css("background-color", colorDark);
 
-        $("meta[name=theme-color]").attr("content", colorDark);
-
+            $("meta[name=theme-color]").attr("content", colorDark);
+        }
         $("style").remove(); // Enables snack bars
         $(".mdl-snackbar")
             .attr("style", "display: flex !important");
