@@ -19,6 +19,8 @@ function Nav() {
 
 
     function constructor() {
+        throw "Deprecated: Nav"
+        return;
 
         $.get("/pages/nav.html", function(data) {
             $("#side-menu-insert").html(data).attr("data-conversation-list", "true");

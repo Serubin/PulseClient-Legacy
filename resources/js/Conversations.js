@@ -76,7 +76,6 @@ function Conversations(data, elem, page, small) {
                 formatPhoneNumber(localStorage.getItem("phone_number"))
             );
             
-            Nav();
         }
         
 
