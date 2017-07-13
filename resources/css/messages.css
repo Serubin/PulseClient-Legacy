@@ -89,7 +89,7 @@ p {
     transition: ease-in-out width 0.5s;
 }
 
-.send-bar-content {
+#compose-head, .send-bar-content {
     background: white;
     height: 100%;
     padding-left: 16px;
@@ -181,28 +181,28 @@ p {
 
 
 @media (min-width: 750px) {
-  .send-bar {
+  .send-bar, #compose-head {
     width: 500px;
   }
 }
 
 @media (min-width: 800px) {
-  .send-bar {
+  .send-bar, #compose-head {
     width: 550px;
   }
 }
 @media (min-width: 850px) {
-  .send-bar {
+  .send-bar, #compose-head {
     width: 600px;
   }
 }
 @media (min-width: 900px) {
-  .send-bar {
+  .send-bar, #compose-head {
     width: 650px;
   }
 }
 @media (min-width:950px) {
-  .send-bar {
+  .send-bar, #compose-head {
     width: 650px;
   }
 }
@@ -293,5 +293,4 @@ p {
 
 #toolbar-title {
   white-space: nowrap;
-  overflow: hidden;
 }

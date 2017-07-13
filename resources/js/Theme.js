@@ -41,6 +41,7 @@ function enableTheme() {
     }
 
     if (hasColoredToolbar()) {
+
       $(".material-icons").addClass("material-icons-white");
       $("#toolbar-title").css("color", "white");
       $(".icon_logo").addClass("icon_logo_dark").removeClass("icon_logo");
@@ -48,6 +49,15 @@ function enableTheme() {
 
       var color = hasGlobalTheme() ? globalColor : "#009688";
       $("#toolbar").css("background-color", color);
+
+    } else {
+
+      $("#toolbar").css("background-color", "#f3f3f3");
+      $("#toolbar-title").css("color", "#666666");
+      $(".material-icons").removeClass("material-icons-white");
+      $(".icon_logo_dark").addClass("icon_logo").removeClass("icon_logo_dark");
+      $(".icon_menu_toggle_dark").addClass("icon_menu_toggle").removeClass("icon_menu_toggle_dark");
+
     }
 
     $(".empty").css("background-color", globalColor);

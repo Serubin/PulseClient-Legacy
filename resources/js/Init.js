@@ -20,6 +20,7 @@ var PAGE_LOGIN      = "login";
 var PAGE_THREAD     = "thread";
 var PAGE_COMPOSE    = "compose";
 var PAGE_LIST       = "conversations";
+var PAGE_SETTINGS       = "settings";
 
 var $content;
 var $insert;

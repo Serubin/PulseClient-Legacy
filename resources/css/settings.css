@@ -14,17 +14,31 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+.page-content {
+    margin-top: 46px;
+}
+
+@media (min-width:750px) {
+    .mdl-layout__content {
+        max-width: 650px;
+    }
+}
+
 .item, .click-item {
-	line-height: 18px;
-	width: 100%;
-	padding: 16px;
+    line-height: 18px;
+    width: 100%;
+    padding: 16px;
 }
 
 .item:hover {
-	background: #E0E0E0;
+    background: #E0E0E0;
 }
 
 .click-item:hover {
-	background: #E0E0E0;
-	cursor: pointer;
+    background: #E0E0E0;
+    cursor: pointer;
+}
+
+.mdl-switch {
+    margin-left: 12px;
 }

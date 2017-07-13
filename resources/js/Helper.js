@@ -209,6 +209,12 @@ function scrollToBottom(speed) {
     $document.animate({"scrollTop": $document[0].scrollHeight}, speed);
 }
 
+function allowNotification() {
+  var notification_toggle = localStorage.getItem("notifications");
+  return typeof notification_toggle !== "undefined" && notification_toggle === "yes";
+}
+
+
 /**
 * Contains element
 * @param element value

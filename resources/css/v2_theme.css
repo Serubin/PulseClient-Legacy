@@ -101,6 +101,7 @@ body {
 
 .mdl-layout__content {
   width: 100%;
+  overflow: visible;
 }
 
 img {
@@ -158,10 +159,10 @@ a {
 }
 
 .mdl-layout-title {
-  display: none;
   float: left;
   margin-left: 15px;
   margin-top: 12px;
+  color: #666666;
 }
 
 #toolbar_icons {
@@ -261,8 +262,8 @@ a {
 	min-height: 26px;
 	width: 100%;
 	cursor: pointer;
-  background-color: #f3f3f3;
-  padding: 7px 0;
+    background-color: #f3f3f3;
+    padding: 7px 0;
 }
 
 #drawer_links .filter img {

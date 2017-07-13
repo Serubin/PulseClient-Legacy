@@ -54,16 +54,16 @@ function Compose(data, $elem) {
         current_page_id = page_id;
 
         $back_btn.show(); // Hide back button by default
-        $more_btn.hide(); // Hide back button by default
         $expand_btn.hide() // Show expand button by default
 
         // Set colors
-        $toolbar.css("background-color", color);
-        $navd_title.css("background-color", colorDark);
-        $navd_subtitle.css("background-color", colorDark);
+        if(hasColoredToolbar()) {
+            $toolbar.css("background-color", color);
+            $navd_title.css("background-color", colorDark);
+            $navd_subtitle.css("background-color", colorDark);
 
-        $("meta[name=theme-color]").attr("content", colorDark);
-
+            $("meta[name=theme-color]").attr("content", colorDark);
+        }   
         // Set page title
         document.title = "Pulse - Compose";
         $toolbar_title.html("Compose Message");
