@@ -70,7 +70,7 @@ body {
   margin: auto;
   margin-left: 0;
   color: #202020;
-  background-color: #fafafa;
+  background-color: #f3f3f3;
   font-family: "Open Sans", "Helvetica", Arial, sans-serif;
   font-size: 14px;
   padding: 0 !important;
@@ -219,7 +219,7 @@ a {
   overflow-y: hidden;
   z-index: 3;
   /*border-right: 1px solid #f1f1f1;*/
-  background-color: #fafafa;
+  background-color: #f3f3f3;
 }
 
 #side-menu:hover {
@@ -261,7 +261,7 @@ a {
 	min-height: 26px;
 	width: 100%;
 	cursor: pointer;
-  background-color: #FAFAFA;
+  background-color: #f3f3f3;
   padding: 7px 0;
 }
 
