@@ -56,7 +56,7 @@ function Conversations(data, elem, page, small) {
             current_page_id = page_id;
 
             $back_btn.hide(); // Hide back button by default
-            $more_btn.hide(); // Hide back button by default
+            $more_btn.show(); // Hide back button by default LEGACY
             $expand_btn.css("display", "") // Show expand button by default
             
             // Set colors

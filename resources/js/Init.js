@@ -98,7 +98,6 @@ function Init(){
         enableTheme();
 
         $back_btn.hide(); // Hide back button by default
-        $more_btn.hide(); // Hide back button by default
         $expand_btn.hide() // Hide expand button by default
         
 
