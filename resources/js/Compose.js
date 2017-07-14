@@ -32,6 +32,10 @@ function Compose(data, $elem) {
     var $input              = $("#recipient");
     var $chip_insert        = $("#chip-insert");
     var $autocomp;
+    // Menu Buttons
+    var $delete_btn         = $("#delete-btn");
+    var $archive_btn        = $("#archive-btn");
+    var $blacklist_btn      = $("#blacklist-btn");
 
     var contacts            = [];
     var contactsByName      = {};
@@ -53,31 +57,21 @@ function Compose(data, $elem) {
         page_id = "compose" + new Date();
         current_page_id = page_id;
 
-        $back_btn.show(); // Hide back button by default
-        $expand_btn.hide() // Show expand button by default
+        $delete_btn.hide(); // Hide back button by default
+        $archive_btn.hide(); // Hide back button by default 
+        $blacklist_btn.hide(); // Hide expand button by default
 
         // Set colors
         if(hasColoredToolbar()) {
             $toolbar.css("background-color", color);
-            $navd_title.css("background-color", colorDark);
-            $navd_subtitle.css("background-color", colorDark);
 
             $("meta[name=theme-color]").attr("content", colorDark);
         }   
         // Set page title
         document.title = "Pulse - Compose";
         $toolbar_title.html("Compose Message");
-        $navd_title.html(localStorage.getItem("name"));
-        $navd_subtitle.html(
-            formatPhoneNumber(localStorage.getItem("phone_number"))
-        );
        
-    
-        // Back button
-        $back_btn.on('click', function() {
-            setPage(PAGE_LIST)
-        });
-
+      
         $msg_entry.autoGrow({extraLine: false});
 
         // Message entry fixes (prevent default)
