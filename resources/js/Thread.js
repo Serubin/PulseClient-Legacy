@@ -74,10 +74,12 @@ function Thread(data) {
     var $delete_btn         = $("#delete-conversation");
     var $emoji_btn          = $("#emoji");
     var $attach             = $("#attach");
-    var $navd_title         = $("#nav-drawer-title");
-    var $navd_subtitle      = $("#nav-drawer-subtitle");
     var $side_menu          = $("#side-menu-insert");
     var $convo_tab;
+    // Menu Buttons
+    var $delete_btn         = $("#delete-btn");
+    var $archive_btn        = $("#archive-btn");
+    var $blacklist_btn      = $("#blacklist-btn");
     
     function constructor() {
         
@@ -87,35 +89,27 @@ function Thread(data) {
 
         // Set conversation Title
         document.title = "Pulse - " + title;
-        $navd_title.html(title);
-        $navd_subtitle.html(formatPhoneNumber(phoneNumbers));
 
         $toolbar_title.html(title);
 
         if(hasColoredToolbar()) {
             $toolbar.css("background-color", color);
-            $navd_title.css("background-color", colorDark);
-            $navd_subtitle.css("background-color", colorDark);
             $send_btn.css("background-color", colorAccent);
 
             $("meta[name=theme-color]").attr("content", colorDark);
         }
 
-        $back_btn.show(); // Hide back button by default
-        $more_btn.show(); // Hide back button by default
-        $expand_btn.hide() // Show expand button by default
+        $delete_btn.show(); // show back button by default
+        $archive_btn.show(); // show back button by default 
+        $blacklist_btn.show(); // show expand button by default
         
-        $back_btn.on('click', function() {
-            setPage(PAGE_LIST)
-        });
+        var archive_btn_text = $archive_btn.find('#archive-btn-text')
 
-        if (archived === 'true') {
-            $back_btn.click(function() {
-                setPage(PAGE_LIST + "/archived");
-            });
-            $archive_conver.html("Move to Inbox");
-        }
-
+        if(archived)
+            archive_btn_text.html("Move to Inbox")
+        else
+            archive_btn_text.html("Archive Conversation")
+        
         // EVENTS
         //
         // Window events    
@@ -159,22 +153,22 @@ function Thread(data) {
         });
         
         // Archive convo button
-        $archive_conver.off().on('click', function() {
+        $archive_btn.off().on('click', function() {
             if (archived === 'true') {
                 var url = getBaseUrl() 
                     + "/api/v1/conversations/unarchive/" 
                     + conversation_id + "?account_id=" + account_id + "&archive=true"
-                $.post()
+                $.post(url)
                     .done(function(data) { 
-                        window.location.replace(archive); 
+                        setPage(PAGE_LIST);
                     }).fail(failed);
             } else {
                 var url = getBaseUrl() 
                     + "/api/v1/conversations/archive/" + conversation_id 
                     + "?account_id=" + account_id + "&archive=true"
-                $.post()
+                $.post(url)
                     .done(function(data) { 
-                        setPage(PAGE_LIST);
+                        setPage(PAGE_ARCHIVE);
                     }).fail(failed);
             }
         });

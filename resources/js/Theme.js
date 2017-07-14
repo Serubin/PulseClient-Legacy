@@ -52,7 +52,7 @@ function enableTheme() {
 
     } else {
 
-      $("#toolbar").css("background-color", "#f3f3f3");
+      $("#toolbar").css("background-color", "#fafafa");
       $("#toolbar-title").css("color", "#666666");
       $(".material-icons").removeClass("material-icons-white");
       $(".icon_logo_dark").addClass("icon_logo").removeClass("icon_logo_dark");

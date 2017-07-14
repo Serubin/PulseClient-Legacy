@@ -19,22 +19,40 @@ function Nav() {
 
 
     function constructor() {
-        throw "Deprecated: Nav"
-        return;
-
-        $.get("/pages/nav.html", function(data) {
-            $("#side-menu-insert").html(data).attr("data-conversation-list", "true");
 
             setEvents();
-        });
-
         
     }
  
     function setEvents() {
-        var $logout_btn         = $("#logout");
+        var $conversation_link      = $("#conversations-link");
+        var $archive_link           = $("#archive-link");
+        var $settings_btn           = $("#settings-btn");
+        var $logout_btn             = $("#logout-btn");
 
-        $logout_btn.on('click', function() {
+
+        $conversation_link.on('click', function(e) {
+            setPage(PAGE_LIST);
+
+            e.preventDefault();
+            return false;
+        });
+
+        $archive_link.on('click', function(e) {
+            setPage(PAGE_ARCHIVE);
+
+            e.preventDefault();
+            return false;
+        });
+
+        $settings_btn.on('click', function(e) {
+            setPage(PAGE_SETTINGS);
+
+            e.preventDefault();
+            return false;
+        });
+
+        $logout_btn.on('click', function(e) {
             account_id = null;
 
             localStorage.removeItem("account_id");
@@ -44,7 +62,9 @@ function Nav() {
             localStorage.removeItem("name");
             setPage(PAGE_LOGIN);
 
-        })
+            e.preventDefault();
+            return false;
+        });
     }
     constructor();
 }

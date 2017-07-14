@@ -5,7 +5,11 @@ module.exports = function(grunt) {
 			js_concat: {
 				src: ['resources/js/*.js'],
 				dest: 'resources/App.js'
-			}
+			},
+            js_lib_concat: {
+                src: ['vendors/**/*.js'],
+                dest: 'resources/Lib.js'
+            }
         },
         watch: {
             js: {

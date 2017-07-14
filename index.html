@@ -20,33 +20,27 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="description" content="Pulse">
    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+   
    <title>Pulse</title>
    <meta name="mobile-web-app-capable" content="yes">
    <meta name="theme-color" content="#00695C">
    <link rel="icon" sizes="192x192" href="/resources/images/android-desktop.png">
+
    <!--<meta name="apple-mobile-web-app-capable" content="yes">-->
    <meta name="apple-mobile-web-app-status-bar-style" content="black">
    <meta name="apple-mobile-web-app-title" content="Pulse">
    <link rel="apple-touch-icon-precomposed" href="/resources/images/ios-desktop.png">
    <link rel="shortcut icon" href="/resources/images/favicon.png">
+
+
+   <script src="/resources/Lib.js"></script>
+   <script src="/resources/App.js"></script>
+
    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-   <script src="https://code.getmdl.io/1.2.0/material.min.js"></script>
    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
    <link rel="stylesheet" href="https://code.getmdl.io/1.2.0/material.teal-orange.min.css">
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-   <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase-app.js"></script>
-   <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase-storage.js"></script>
-   <script src="/vendors/encryption/sjcl.js"></script>
-   <script src="/vendors/encryption/hmacsha1.js"></script>
-   <script src="/vendors/linkify/linkify.min.js"></script>
-   <script src="/vendors/linkify/linkify-jquery.min.js"></script>
    <link rel="stylesheet" href="/vendors/emoji/jquery.emojipicker.css">
-   <script src="/vendors/emoji/jquery.emojipicker.js"></script>
    <link rel="stylesheet" href="/vendors/emoji/jquery.emojipicker.tw.css">
-   <script src="/vendors/emoji/jquery.emojis.js"></script>
-   <script src="/vendors/textarea-autogrow.min.js"></script>
-    <script src="/resources/App.js"></script>
-   <script src="/resources/js/theme_manager.js"></script>
    <link rel="stylesheet" href="/resources/css/global.css">
    <link rel="stylesheet" href="/resources/css/messages.css">
    <link rel="stylesheet" href="/resources/css/conversations.css">
@@ -68,13 +62,13 @@
                <i class="material-icons">more_vert</i>
             </button>
             <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="more-button">
-               <li class="mdl-menu__item" id="delete-option"><a class="mdl-menu__item" id="delete-conversation" href="#">Delete Conversation</a></li>
-               <li class="mdl-menu__item" id="archive-option"><a class="mdl-menu__item" id="archive-conversation" href="#">Archive Conversation</a></li>
-               <li class="mdl-menu__item" id="blacklist-option"><a class="mdl-menu__item" id="blacklist-contact" href="#">Blacklist Contact</a></li>
-               <li class="mdl-menu__item"><a class="mdl-menu__item" href="my_account.html">My Account</a></li>
-               <li class="mdl-menu__item"><a class="mdl-menu__item" href="/settings">Settings</a></li>
+               <li class="mdl-menu__item" id="delete-btn"><a class="mdl-menu__item" id="delete-conversation" href="#">Delete Conversation</a></li>
+               <li class="mdl-menu__item" id="archive-btn"><a class="mdl-menu__item" id="archive-conversation" href="#"><span id="archive-btn-text">Archive Conversation</span></a></li>
+               <li class="mdl-menu__item" id="blacklist-btn"><a class="mdl-menu__item" id="blacklist-contact" href="#">Blacklist Contact</a></li>
+               <li class="mdl-menu__item" id="account-btn"><a class="mdl-menu__item" href="#">My Account</a></li>
+               <li class="mdl-menu__item" id="settings-btn"><a class="mdl-menu__item" href="#">Settings</a></li>
                <li class="mdl-menu__item"><a class="mdl-menu__item" href="help_and_feedback.html">Help and Feedback</a></li>
-               <li class="mdl-menu__item"><a class="mdl-menu__item" id="logout">Log Out</a></li>
+               <li class="mdl-menu__item" id="logout-btn"><a class="mdl-menu__item" id="logout" href="#">Log Out</a></li>
             </ul>
          </div>
       </div>
@@ -84,8 +78,8 @@
             <div id="drawer_holder">
                <div>
                   <ul id="drawer_links">
-                     <li class="filter" id="conversations_link"><div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect"><img src="/resources/images/holder.gif" width="24" height="24" class="icon_conversations">Conversations</div></li>
-                     <li class="filter" id="archive_link"><div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect"><img src="/resources/images/holder.gif" width="24" height="24" class="icon_archive">Archive</div></li>
+                     <li class="filter" id="conversations-link"><div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect"><img src="/resources/images/holder.gif" width="24" height="24" class="icon_conversations">Conversations</div></li>
+                     <li class="filter" id="archive-link"><div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect"><img src="/resources/images/holder.gif" width="24" height="24" class="icon_archive">Archive</div></li>
                      <li class="filter" id="scheduled_messages_link"><div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect"><img src="/resources/images/holder.gif" width="24" height="24" class="icon_scheduled_messages">Scheduled Messages</div></li>
                      <li class="filter" id="blacklist_link"><div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect"><img src="/resources/images/holder.gif" width="24" height="24" class="icon_blacklist">Blacklist</div></li>
                   </ul>

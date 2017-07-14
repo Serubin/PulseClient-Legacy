@@ -29,10 +29,12 @@ function Conversations(data, elem, page, small) {
     var $expand_btn         = $("#expand-btn");
     var $toolbar            = $("#toolbar");
     var $toolbar_title      = $("#toolbar-title");
-    var $navd_title         = $("#nav-drawer-title");
-    var $navd_subtitle      = $("#nav-drawer-subtitle");
     var $refresh_btn        = $("#refresh-button");
     var $compose_btn        = $("#compose");
+    // Menu Buttons
+    var $delete_btn         = $("#delete-btn");
+    var $archive_btn        = $("#archive-btn");
+    var $blacklist_btn      = $("#blacklist-btn");
 
     var color               = hasGlobalTheme() ? 
                                globalColor : "#2196F3";
@@ -41,7 +43,8 @@ function Conversations(data, elem, page, small) {
     var colorAccent         = hasGlobalTheme() ? 
                                globalAccentColor :  "#FF6E40" ;
 
-    var initial_load = true;
+    var archive             = false;
+    var initial_load        = true;
 
     function constructor() {
     
@@ -51,19 +54,21 @@ function Conversations(data, elem, page, small) {
             $("[data-conversation-list=true]").html("")
                     .removeAttr("data-conversations-list");
 
+        if(data == "archive")
+            archive = true;
+
+
         if(typeof elem == "undefined") {
             page_id = "conversationlist" + new Date();
             current_page_id = page_id;
 
-            $back_btn.hide(); // Hide back button by default
-            $more_btn.show(); // Hide back button by default LEGACY
-            $expand_btn.css("display", "") // Show expand button by default
+            $delete_btn.hide(); // Hide back button by default
+            $archive_btn.hide(); // Hide back button by default 
+            $blacklist_btn.hide(); // Hide expand button by default
             
             // Set colors
             if(hasColoredToolbar()) {
                 $toolbar.css("background-color", color);
-                $navd_title.css("background-color", colorDark);
-                $navd_subtitle.css("background-color", colorDark);
 
                 $("meta[name=theme-color]").attr("content", colorDark);
             }
@@ -71,10 +76,9 @@ function Conversations(data, elem, page, small) {
             // Set page title
             document.title = "Pulse";
             $toolbar_title.html("Pulse");
-            $navd_title.html(localStorage.getItem("name"));
-            $navd_subtitle.html(
-                formatPhoneNumber(localStorage.getItem("phone_number"))
-            );
+
+            if(archive)
+                $toolbar_title.html("Archive");
             
         }
         
@@ -120,7 +124,10 @@ function Conversations(data, elem, page, small) {
     }
 
     function getIndex() { // TODO, archived support
-        return "index_unarchived";
+        if(!archive)
+            return "index_unarchived";
+        else
+            return "index_archived";
     }
     
     function renderConversation(data) {

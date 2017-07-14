@@ -20,7 +20,8 @@ var PAGE_LOGIN      = "login";
 var PAGE_THREAD     = "thread";
 var PAGE_COMPOSE    = "compose";
 var PAGE_LIST       = "conversations";
-var PAGE_SETTINGS       = "settings";
+var PAGE_ARCHIVE    = "conversations/archive";
+var PAGE_SETTINGS   = "settings";
 
 var $content;
 var $insert;
@@ -42,14 +43,9 @@ $(Init);
 
 function Init(){
 
-    var $expand_btn         = $("#expand-btn");
     var $side_menu          = $("#side-menu");
-    var $navd_title         = $("#nav-drawer-title");
-    var $navd_subtitle      = $("#nav-drawer-subtitle");
     var $content            = $("#content");
     var $toolbar            = $("#toolbar");
-    var $navd_title         = $("#nav-drawer-title");
-    var $navd_subtitle      = $("#nav-drawer-subtitle");
     var $inserted           = null;
 
     var color               =  "#2196F3";
@@ -57,23 +53,27 @@ function Init(){
     var colorAccent         =  "#FF6E40" ;
 
     account_id              = localStorage.getItem("account_id");
-    $back_btn               = $("#back-button");
-    $more_btn               = $("#more-button");
+
+    var $delete_btn         = $("#delete-btn");
+    var $archive_btn        = $("#archive-btn");
+    var $blacklist_btn      = $("#blacklist-btn");
 
     $(window).on('hashchange', loadPage);
     $(window).on('popstate', loadPage);
 
     function constructor() {
 
+        Nav();
+
         // Set colors
         if(hasColoredToolbar()) {
             $toolbar.css("background-color", color);
-            $navd_title.css("background-color", colorDark);
-            $navd_subtitle.css("background-color", colorDark);
 
             $("meta[name=theme-color]").attr("content", colorDark);
         }
+
         $("style").remove(); // Enables snack bars
+
         $(".mdl-snackbar")
             .attr("style", "display: flex !important");
 
@@ -91,26 +91,8 @@ function Init(){
             return;
 
         // Set up base title
-        $navd_title.html(localStorage.getItem("name"));
-        $navd_subtitle.html(
-            formatPhoneNumber(localStorage.getItem("phone_number"))
-        );
 
         enableTheme();
-
-        $back_btn.hide(); // Hide back button by default
-        $expand_btn.hide() // Hide expand button by default
-        
-
-        setTimeout(function() {
-            expand_sib = $expand_btn.siblings()[0];
-            $expand_btn.removeClass("mdl-layout--large-screen-only")
-                    .addClass("mdl-layout--small-screen-only")
-                    .detach().prependTo(expand_sib);
-
-            $side_menu.css("display", "");
-
-        }, 250)
 
         loadPage();
     }
