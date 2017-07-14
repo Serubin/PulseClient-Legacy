@@ -26,6 +26,10 @@ function Settings(data, $elem) {
     var $colored_toolbar    = $("#colored-toolbar");
     var $toolbar_title      = $("#toolbar-title");
     var $refresh_settings   = $("#refresh_settings");
+    // Menu Buttons
+    var $delete_btn         = $("#delete-btn");
+    var $archive_btn        = $("#archive-btn");
+    var $blacklist_btn      = $("#blacklist-btn");
 
     var color               = hasGlobalTheme() ? 
                                globalColor : "#2196F3";
@@ -48,6 +52,10 @@ function Settings(data, $elem) {
         // Set page title
         document.title = "Pulse - Settings";
         $toolbar_title.html("Settings");
+
+        $delete_btn.hide(); // Hide back button by default
+        $archive_btn.hide(); // Hide back button by default 
+        $blacklist_btn.hide(); // Hide expand button by default
 
         var globalColor = localStorage.getItem("global_color_theme")
         var baseTheme = localStorage.getItem("base_theme");
