@@ -50,7 +50,7 @@ function Conversations(data, elem, page, small) {
     
         $refresh_btn.off();
 
-        if ($("[data-conversation-list=true]").length > 0 )
+        if ($("[data-conversation-list=true]").length > 0 && typeof elem == "undefined")
             $("[data-conversation-list=true]").html("")
                     .removeAttr("data-conversations-list");
 
