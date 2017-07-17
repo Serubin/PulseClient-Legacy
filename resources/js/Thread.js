@@ -20,6 +20,8 @@
  * @author Solomon Rubin (Serubin.net)
  */
 
+var conversations = []
+
 function Thread(data) {
     var $parent = $("[data-content=inserted]");
 
@@ -33,7 +35,6 @@ function Thread(data) {
     
     // global tracking vars
     var initial_load        = true;
-    var currently_displayed = [];
     
     // Parameters
     var conversation_id     = 0
@@ -83,9 +84,12 @@ function Thread(data) {
     
     function constructor() {
         
-        
+            
         page_id = "thread" + conversation_id + new Date();
         current_page_id = page_id;
+
+        if(!conversations.contains(conversation_id))
+            conversations[conversation_id] = [];
 
         // Set conversation Title
         document.title = "Pulse - " + title;
@@ -258,7 +262,7 @@ function Thread(data) {
 
             // Reset load/currently displayed
             initial_load = true;
-            currently_displayed = []
+            conversations[conversation_id] = []
 
             dismissNotification()
             refreshMessages();
@@ -278,7 +282,7 @@ function Thread(data) {
                 + "&limit=1")
             .done(function (data, status) {
                 if (data.length > 0 
-                        && !currently_displayed.contains(data[0].device_id))
+                        && !conversations[conversation_id].contains(data[0].device_id))
                     refreshMessages();
             });
         current_timeout = setTimeout(checkNewMessages, refresh_rate);
@@ -448,7 +452,7 @@ function Thread(data) {
      * @param stats - from xhr request
      */
     function renderThread(data, status) {
-        var current_size = currently_displayed.length;
+        var current_size = conversations[conversation_id].length;
         
         // Removing loading spinner
         var $loading = $("#loading");
@@ -475,7 +479,7 @@ function Thread(data) {
             }
 
             // Move on if displayed
-            if (currently_displayed.contains(message.device_id)) 
+            if (conversations[conversation_id].contains(message.device_id)) 
                 continue;
             
     
@@ -611,7 +615,7 @@ function Thread(data) {
         $document = $("html");
 
         // Show scroll to bottom snackbar - don't interupt scrolling
-        if (current_size != currently_displayed.length && !initial_load) {
+        if (current_size != conversations[conversation_id].length && !initial_load) {
 
             // If near bottom
             if (!(($document.height() - 400) > $document.scrollTop())) {
@@ -676,11 +680,11 @@ function Thread(data) {
     * @param html - html to add
     */
     function add_to_page(id, html) {
-        if(currently_displayed.contains(id))
+        if(conversations[conversation_id].contains(id))
             return
 
         $("#message-list").append(html);
-        currently_displayed.push(id)
+        conversations[conversation_id].push(id)
 
         if(typeof $conv_el == "undefined" || $conv_el.length == 0)
             $convo_tab = $("#" + conversation_id);
