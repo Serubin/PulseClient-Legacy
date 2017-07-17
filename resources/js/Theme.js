@@ -230,14 +230,14 @@ function loadMiniVersion() {
 		var $sidemenu = $("#side-menu");
 		var $outside_sidemenu = $("#outside-side-menu");
 
-		if ($sidemenu.is(":visible")) {
+		if ($sidemenu.css("margin-left") == "0px") {
 			$html.removeClass("side-menu_show");
 			$sidemenu.css("margin-left", "-269px");
-			$outside_sidemenu.hide();
+			$outside_sidemenu.fadeOut(500);
 		} else {
 			$html.addClass("side-menu_show");
 			$sidemenu.css("margin-left", "0px");
-			$outside_sidemenu.show();
+			$outside_sidemenu.fadeIn(500);
 		}
 	});
 }
