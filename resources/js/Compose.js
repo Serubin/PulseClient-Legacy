@@ -57,10 +57,6 @@ function Compose(data, $elem) {
         page_id = "compose" + new Date();
         current_page_id = page_id;
 
-        $delete_btn.hide(); // Hide back button by default
-        $archive_btn.hide(); // Hide back button by default 
-        $blacklist_btn.hide(); // Hide expand button by default
-
         // Set colors
         if(hasColoredToolbar()) {
             $toolbar.css("background-color", color);

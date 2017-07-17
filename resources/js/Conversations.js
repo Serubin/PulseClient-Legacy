@@ -62,10 +62,6 @@ function Conversations(data, elem, page, small) {
             page_id = "conversationlist" + new Date();
             current_page_id = page_id;
 
-            $delete_btn.hide(); // Hide back button by default
-            $archive_btn.hide(); // Hide back button by default 
-            $blacklist_btn.hide(); // Hide expand button by default
-            
             // Set colors
             if(hasColoredToolbar()) {
                 $toolbar.css("background-color", color);
@@ -75,7 +71,7 @@ function Conversations(data, elem, page, small) {
 
             // Set page title
             document.title = "Pulse";
-            $toolbar_title.html("Pulse");
+            $toolbar_title.html("Conversations");
 
             if(archive)
                 $toolbar_title.html("Archive");

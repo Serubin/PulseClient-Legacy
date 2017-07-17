@@ -38,6 +38,7 @@ var aes;
 
 var last_page;
 var current_page_id;
+var current_conversation;
 
 $(Init);
 
@@ -46,6 +47,7 @@ function Init(){
     var $side_menu          = $("#side-menu");
     var $content            = $("#content");
     var $toolbar            = $("#toolbar");
+    var $toolbar_title      = $("#toolbar-title");
     var $inserted           = null;
 
     var color               =  "#2196F3";
@@ -110,6 +112,11 @@ function Init(){
         // Parse url
         var data; // Url data
 
+        // Set page title
+        document.title = "Pulse - Settings";
+        $toolbar_title.html("Settings");
+
+
         if(typeof url != "string")
             url = window.location.pathname;
         
@@ -142,6 +149,12 @@ function Init(){
         if(account_id != null && page == PAGE_LOGIN) 
             return setPage(PAGE_LIST);
         
+        $delete_btn.hide(); // Hide back button by default
+        $archive_btn.hide(); // Hide back button by default 
+        $blacklist_btn.hide(); // Hide expand button by default
+
+        current_conversation = null;
+
         var sectionFunc = window[page.ucFirst()]; // Get function
         if(typeof sectionFunc != "function") // Exec function
             return setPage(PAGE_LIST);

@@ -53,9 +53,6 @@ function Settings(data, $elem) {
         document.title = "Pulse - Settings";
         $toolbar_title.html("Settings");
 
-        $delete_btn.hide(); // Hide back button by default
-        $archive_btn.hide(); // Hide back button by default 
-        $blacklist_btn.hide(); // Hide expand button by default
 
         var globalColor = localStorage.getItem("global_color_theme")
         var baseTheme = localStorage.getItem("base_theme");
