@@ -203,10 +203,11 @@ function scrollToBottom(speed) {
     
     if (typeof speed == "undefined")
         speed = 0
+    
+    var $window           = $("html, body");
+    var $document         = $("html")[0];
 
-    var $document         = $("html");
-
-    $document.animate({"scrollTop": $document[0].scrollHeight}, speed);
+    $window.animate({"scrollTop": $document.scrollHeight}, speed);
 }
 
 function allowNotification() {
