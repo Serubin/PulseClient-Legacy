@@ -47,7 +47,9 @@ function Conversations(data, elem, page, small) {
     var initial_load        = true;
 
     function constructor() {
-    
+        
+        notifier.setCallback('list', renderConversation);
+
         $refresh_btn.off();
 
         if ($("[data-conversation-list=true]").length > 0 && typeof elem == "undefined")
@@ -83,7 +85,7 @@ function Conversations(data, elem, page, small) {
             page_id = page;
         }
 
-        $refresh_btn.on('click', function() {
+        $refresh_btn.on('click', function() { // TODO make work
             initial_load = true
             $elem.empty();
             $elem.html("<div class=\"spinner\" id=\"loading\">"
@@ -91,33 +93,16 @@ function Conversations(data, elem, page, small) {
                 + "</div>");
             
 
-            refreshConversations();
         });
 
         $compose_btn.on('click', function() {
             setPage(PAGE_COMPOSE);
         })
 
-        refreshConversations();
+        notifier.checkConversations(getIndex());
+
     }
 
-    function refreshConversations() {
-
-        if (current_page_id != page_id)
-            return;
-
-        handle_ui = updateConversations
-        if(initial_load)
-            handle_ui = renderConversation
-        
-        $.get(getBaseUrl() + "/api/v1/conversations/" + getIndex() + "?account_id=" + account_id)
-            .done(handle_ui)
-            .fail(failed);
-
-        initial_load = false;
-
-        setTimeout(refreshConversations, config.refresh_rate_high);
-    }
 
     function getIndex() { // TODO, archived support
         if(!archive)
@@ -133,9 +118,8 @@ function Conversations(data, elem, page, small) {
         $elem.html(""); // Clear contents
 
         var loading = $("#loading");
-        if (loading) {
+        if (loading) 
             loading.remove();
-        }
         
         var conversations = [];
 
@@ -159,90 +143,104 @@ function Conversations(data, elem, page, small) {
             if (i != 0 && convo.device_id == data[i - 1].device_id) 
                 continue;
             
-        
-
             if (i == 0 && convo.pinned) {
                 $elem.append($pinned_wrap);
                 $elem.append($convo_title);
             }
 
 
-            try {
-                convo.title = decrypt(convo.title);
-            } catch (err) {
-                continue;
-            }
-
-            try {
-                convo.snippet = decrypt(convo.snippet).replace(/<.*>/g, "");
-            } catch (err) {
-                convo.snippet = "";
-            }
-
-            try {
-                convo.phone_numbers = decrypt(convo.phone_numbers);
-            } catch (err) {
-                convo.phone_numbers = "";
-            }
-
             convo.color         = toColor(convo.color);
             convo.color_dark    = toColor(convo.color_dark);
             convo.color_accent  = toColor(convo.color_accent);
             
-            $convo_wrap  = $("<div></div>").addClass("conversation-card mdl-card")
-                            .addClass("mdl-shadow--2dp mdl-js-button")
-                            .addClass("mdl-js-ripple-effect")
-                            .attr("id", convo.device_id)
-                            .attr("data-timestamp", convo.timestamp);
+            $conv_el    = $("#"+ convo.device_id);
 
-            $icon       = "<svg class=\"contact-img\" height=\"48\" width=\"48\">"
-                        + "<circle cx=\"24\" cy=\"24\" r=\"24\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
-                        + "</svg>";
+            if($conv_el.length == 0) { // If conversation item doesn't exist yet
+                
+                $convo_wrap  = $("<div></div>").addClass("conversation-card mdl-card")
+                                .addClass("mdl-shadow--2dp mdl-js-button")
+                                .addClass("mdl-js-ripple-effect")
+                                .attr("id", convo.device_id)
+                                .attr("data-timestamp", convo.timestamp);
 
-            $text_wrap  = $("<p></p>").addClass("conversation-text");
+                $icon       = "<svg class=\"contact-img\" height=\"48\" width=\"48\">"
+                            + "<circle cx=\"24\" cy=\"24\" r=\"24\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
+                            + "</svg>";
 
-            $title      = $("<span></span>").addClass("conversation-title mdl-card__supporting-text")
-                            .addClass(read_style)
-                            .html(convo.title);
+                $text_wrap  = $("<p></p>").addClass("conversation-text");
 
-            $break      = $("<br />");
+                $title      = $("<span></span>").addClass("conversation-title mdl-card__supporting-text")
+                                .addClass(read_style)
+                                .html(convo.title);
 
-            $snippet    = $("<span></span>").addClass("conversation-snippet mdl-card__supporting-text")
-                            .addClass(read_style)
-                            .html(convo.snippet);
+                $break      = $("<br />");
 
-            if (small) {
-                $convo_wrap.addClass("conversation-card-small");
-                $convo_wrap.removeClass("mdl-shadow--2dp");
-                $text_wrap.addClass("conversation-text-small");
-                $title.addClass("conversation-title-small");
-                $snippet.addClass("conversation-snippet-small");
-                $icon = "<svg class=\"contact-img contact-img-small\" height=\"24\" width=\"24\">"
-                          + "<circle cx=\"12\" cy=\"12\" r=\"12\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
-                          + "</svg>";
-            } else {
-                $icon = "<svg class=\"contact-img\" height=\"48\" width=\"48\">"
-                          + "<circle cx=\"24\" cy=\"24\" r=\"24\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
-                          + "</svg>";
+                $snippet    = $("<span></span>").addClass("conversation-snippet mdl-card__supporting-text")
+                                .addClass(read_style)
+                                .html(convo.snippet);
+
+                if (small) {
+                    $convo_wrap.addClass("conversation-card-small");
+                    $convo_wrap.removeClass("mdl-shadow--2dp");
+                    $text_wrap.addClass("conversation-text-small");
+                    $title.addClass("conversation-title-small");
+                    $snippet.addClass("conversation-snippet-small");
+                    $icon = "<svg class=\"contact-img contact-img-small\" height=\"24\" width=\"24\">"
+                            + "<circle cx=\"12\" cy=\"12\" r=\"12\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
+                            + "</svg>";
+                } else {
+                    $icon = "<svg class=\"contact-img\" height=\"48\" width=\"48\">"
+                            + "<circle cx=\"24\" cy=\"24\" r=\"24\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
+                            + "</svg>";
+                }
+
+                $text_wrap.append($title, $break, $snippet);
+                $convo_wrap.append($icon, $text_wrap);
+                
+                if (convo.pinned) 
+                    $pinned_wrap.append($convo_wrap);
+                else
+                    $elem.append($convo_wrap);
+                
+                conversations.push(convo);
+
+            } else { // If already exists in dom
+
+                // If unchanged, continue
+                if($conv_el.attr("data-timestamp") == convo.timestamp)
+                    continue;
+
+
+                try { // Decrypt snippet
+                    convo.snippet = decrypt(convo.snippet).replace(/<.*>/g, "");
+                } catch (err) {
+                    convo.snippet = "";
+                }
+
+                // Update with snippet
+                $conv_el.find(".conversation-snippet").html(convo.snippet);
+                $conv_el.attr("data-timestamp", convo.timestamp);
+                
+
+                // Read / not read
+                $conv_el.find("span").removeClass("bold");
+                if(read_style != "")
+                    $conv_el.find("span").addClass("bold");
+
+                // Move to top
+                $conv_el.detach().prependTo("#" + $elem.attr("id"));
             }
-
-            $text_wrap.append($title, $break, $snippet);
-            $convo_wrap.append($icon, $text_wrap);
-            
-            if (convo.pinned) 
-                $pinned_wrap.append($convo_wrap);
-            else
-                $elem.append($convo_wrap);
-            
-            conversations.push(convo);
         }
+
+        if($conv_el.length >= 1) // If structure exists - we're done.
+            return;
 
         if (conversations.length == 0) {
             $elem.html("<div class=\"empty\"><div class=\"empty-text\">"
                 + "No conversations to display!"
                 + "</div></div>");
 
-            return
+            return;
         }
 
         for (var i = 0; i < conversations.length; i++) {
@@ -275,41 +273,6 @@ function Conversations(data, elem, page, small) {
 
         componentHandler.upgradeElements($elem);
     }
-
-    function updateConversations(data) {
-        for (var i = data.length - 1; i >= 0; i--) {
-            var convo = data[i];
-            var read_style      = convo.read ? "" : " bold";
-
-           
-            var $conv_el = $("#" + convo.device_id);
-            
-            // If unchanged, continue
-            if($conv_el.attr("data-timestamp") == convo.timestamp)
-                continue;
-
-
-            try { // Decrypt snippet
-                convo.snippet = decrypt(convo.snippet).replace(/<.*>/g, "");
-            } catch (err) {
-                convo.snippet = "";
-            }
-
-            // Update with snippet
-            $conv_el.find(".conversation-snippet").html(convo.snippet);
-            $conv_el.attr("data-timestamp", convo.timestamp);
-            
-
-            // Read / not read
-            $conv_el.find("span").removeClass("bold");
-            if(read_style != "")
-                $conv_el.find("span").addClass("bold");
-
-            // Move to top
-            $conv_el.prependTo("#" + $elem.attr("id"));
-        }
-    }
-
 
     constructor();
 }

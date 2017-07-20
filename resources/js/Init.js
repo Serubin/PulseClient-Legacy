@@ -40,6 +40,8 @@ var last_page;
 var current_page_id;
 var current_conversation;
 
+var notifier;
+
 $(Init);
 
 function Init(){
@@ -66,6 +68,8 @@ function Init(){
     function constructor() {
 
         Nav();
+
+        notifier = new Notifier();
 
         // Set colors
         if(hasColoredToolbar()) {

@@ -196,6 +196,19 @@ function showConfirmDialog(message, func) {
   });
 }
 
+function entityEncode(string) {
+    while (string.indexOf("<") !== -1) {
+        string = string.replace("<", "&lt;");
+    }
+
+    while (string.indexOf(">") !== -1) {
+        string = string.replace(">", "&gt;");
+    }
+
+    string = string.replace(/\n/g, '<br />');
+    return string;
+}
+
 /**
  * Scrolls message wrapper to bottom
  */

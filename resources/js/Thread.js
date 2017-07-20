@@ -87,6 +87,7 @@ function Thread(data) {
             
         page_id = "thread" + conversation_id + new Date();
         current_page_id = page_id;
+        current_conversation = conversation_id;
 
         if(!conversations.contains(conversation_id))
             conversations[conversation_id] = [];
@@ -106,6 +107,8 @@ function Thread(data) {
         $delete_btn.show(); // show back button by default
         $archive_btn.show(); // show back button by default 
         $blacklist_btn.show(); // show expand button by default
+
+        notifier.setCallback("thread", renderThread)
         
         var archive_btn_text = $archive_btn.find('#archive-btn-text')
 
@@ -469,15 +472,6 @@ function Thread(data) {
 
             var mimeType = "";
 
-            // Decrypt messages
-            try { 
-                mimeType = decrypt(message.mime_type);
-                message.data = decrypt(message.data).replace(/<.*>/g, "");
-                message.message_from = decrypt(message.message_from);
-            } catch (err) {
-                continue;
-            }
-
             // Move on if displayed
             if (conversations[conversation_id].contains(message.device_id)) 
                 continue;
@@ -612,13 +606,14 @@ function Thread(data) {
         $(".message").linkify();
         $(".linkified").css("color", colorAccent);
         
-        $document = $("html");
+        $document = $("html, body");
+        $body = $("body");
 
         // Show scroll to bottom snackbar - don't interupt scrolling
         if (current_size != conversations[conversation_id].length && !initial_load) {
 
             // If near bottom
-            if (!(($document.height() - 400) > $document.scrollTop())) {
+            if (!(($document.height() - 400) > $body.scrollTop())) {
                 scrollToBottom(250)
                 return
             }
