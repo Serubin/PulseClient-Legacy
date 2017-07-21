@@ -145,11 +145,12 @@ function Notifier() {
             } catch (err) {
                 convo.phone_numbers = "";
             }
-
-            if((!convo.read || last_notification[convo.device_id] <= convo.timestamp) || initial_load) // TODO fix this. This is hard
-                last_notification[convo.device_id] = convo.timestamp;
-            else
+            
+            // Only send notification on new messages
+            if((!convo.read) && last_notification[convo.device_id] < convo.timestamp && !initial_load)
                 sendNotification(convo.device_id, convo);
+            else
+                last_notification[convo.device_id] = convo.timestamp;
         }
 
         if(typeof callbacks.list != "undefined")
