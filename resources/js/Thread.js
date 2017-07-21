@@ -76,7 +76,7 @@ function Thread(data) {
     var $emoji_btn          = $("#emoji");
     var $attach             = $("#attach");
     var $side_menu          = $("#side-menu-insert");
-    var $convo_tab;
+    var $convo_tab          = $("#" + conversation_id);
     // Menu Buttons
     var $delete_btn         = $("#delete-btn");
     var $archive_btn        = $("#archive-btn");
@@ -295,7 +295,9 @@ function Thread(data) {
     */
     function sendMessage(id, data, mime_type) {
 
-        $convo_tab.detach().prependTo("#side-menu-insert");
+        var $convo_tab = $("#" + conversation_id);
+        $convo_tab.detach()
+        .prependTo("#side-menu-insert");
 
         var encrypted = encrypt(data);
         var snippetEncrypted = encrypt("You: " + data);
@@ -428,6 +430,8 @@ function Thread(data) {
         var $loading = $("#loading");
         if ($loading) 
             $loading.remove();
+
+        var $convo_tab = $("#" + conversation_id);
 
         if(!initial_load)
             $convo_tab.detach().prependTo("#side-menu-insert");
@@ -643,7 +647,7 @@ function Thread(data) {
         if(conversations[conversation_id].contains(id))
             return
 
-        $("#message-list").append(html);
+        $msg_list.append(html);
         conversations[conversation_id].push(id)
 
         if(typeof $conv_el == "undefined" || $conv_el.length == 0)
