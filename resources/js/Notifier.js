@@ -65,7 +65,7 @@ function Notifier() {
         if(current_conversation != null)
             checkThread(current_conversation);
          else
-            checkConversations("index_unarchived");
+            checkConversations(getIndex());
 
         latest_timestamp = data;
     }
@@ -114,7 +114,7 @@ function Notifier() {
                 callbacks.thread(data);
             
             if(!found)
-                checkConversations("index_unarchived");
+                checkConversations(getIndex());
             
         }
 
@@ -177,6 +177,13 @@ function Notifier() {
         }
 
         var notifcation = new Notification(title, options);
+    }
+
+    function getIndex() {
+        if(window.location.pathname.indexOf("archive") < 0)
+            return "index_unarchived";
+        else
+            return "index_archived";
     }
 
  

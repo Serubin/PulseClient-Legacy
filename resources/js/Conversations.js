@@ -48,6 +48,9 @@ function Conversations(data, elem, page, small) {
 
     function constructor() {
         
+        if(data == "archive")
+            archive = true;
+
         notifier.setCallback('list', renderConversation);
         notifier.checkConversations(getIndex());
 
@@ -56,10 +59,6 @@ function Conversations(data, elem, page, small) {
         if ($("[data-conversation-list=true]").length > 0 && typeof elem == "undefined")
             $("[data-conversation-list=true]").html("")
                     .removeAttr("data-conversations-list");
-
-        if(data == "archive")
-            archive = true;
-
 
         if(typeof elem == "undefined") {
             page_id = "conversationlist" + new Date();
@@ -134,6 +133,7 @@ function Conversations(data, elem, page, small) {
                         .addClass("mdl-color-text--grey-500")
                         .html("Conversations");
 
+        var $conv_el;
 
         for (var i = 0; i < data.length; i++) {
             
@@ -233,7 +233,7 @@ function Conversations(data, elem, page, small) {
             }
         }
 
-        if($conv_el.length >= 1) // If structure exists - we're done.
+        if(typeof $conv_el != "undefined" && $conv_el.length >= 1) // If structure exists - we're done.
             return;
 
         if (conversations.length == 0) {
