@@ -89,7 +89,7 @@ function Notifier() {
 
 
                 try { 
-                    mimeType = decrypt(message.mime_type);
+                    message.mime_type = decrypt(message.mime_type);
 
                     message.data = decrypt(message.data)
                     message.data = entityEncode(message.data);
@@ -103,7 +103,7 @@ function Notifier() {
                     found = true;
             
                 if(message.timestamp > last_notification[conversation_id])
-                    sendNotification(conversation_id, data)
+                    sendNotification(conversation_id, message)
                 
             }
 
@@ -111,11 +111,12 @@ function Notifier() {
                 callbacks.thread(data);
             
             if(!found)
-                checkConversations();
+                checkConversations("index_unarchived");
             
         }
 
     }
+    this.checkThread = checkThread;
 
 
     function checkConversations(index) {
@@ -161,12 +162,16 @@ function Notifier() {
 
 
     function sendNotification(conversation_id, data) {
-        last_notification[conversation_id] = data.timestamp
+        last_notification[conversation_id] = data.timestamp;
 
         var title = data.title || localStorage.getItem(conversation_id + "title");
         var snippet = data.snippet || data.data;
+        
+        var options = {
+            body: snippet
+        }
 
-        var notifcation = new Notification(title);
+        var notifcation = new Notification(title, options);
     }
 
  

@@ -108,7 +108,6 @@ function Thread(data) {
         $archive_btn.show(); // show back button by default 
         $blacklist_btn.show(); // show expand button by default
 
-        notifier.setCallback("thread", renderThread)
         
         var archive_btn_text = $archive_btn.find('#archive-btn-text')
 
@@ -120,17 +119,17 @@ function Thread(data) {
         // EVENTS
         //
         // Window events    
-        $(window).on('focus', function() {
+        $(window).on('focus', function(e) {
             clearTimeout(current_timeout)
             refresh_rate = config.refresh_rate_low
-            checkNewMessages()
+
             $msg_entry.focus();
+            e.preventDefault()
         });
 
         $(window).on('blur', function() {
             clearTimeout(current_timeout)
             refresh_rate = config.refresh_rate_high
-            current_timeout = setTimeout(checkNewMessages, refresh_rate)
         });
 
         // On Drag/Dropa events 
@@ -187,7 +186,7 @@ function Thread(data) {
                 return false;
             
             // If within 200 px of the message, remove snack bar
-            if( ($msg_list.height() - $(window).height() - 200)
+            if( ($msg_list.height() - $(window).height() - 200) // TODO fix this
                 < $mlist_wrap.scrollTop())
                 snackbarContainer.MaterialSnackbar.cleanup_();
         });
@@ -205,7 +204,7 @@ function Thread(data) {
         $parent.on('keyup', '#message-entry',  function(event) {
             if(event.keyCode == 13 && !event.shiftKey) {
                 $send_btn.click();
-                scrollToBottom()
+
                 event.stopPropagation();
                 event.preventDefault();
                 return false;
@@ -227,7 +226,9 @@ function Thread(data) {
 
             if (text.length > 0) {
                 sendSmsMessage(text);
-                scrollToBottom();
+
+                scrollToBottom(250);
+
                 $msg_entry.val(null);
                 $msg_entry.autoGrow(); // Get rid of extra lines
                 
@@ -250,8 +251,9 @@ function Thread(data) {
             input.change(dropListener);
         });
 
-        refreshMessages();
-        setTimeout(checkNewMessages, refresh_rate);
+        notifier.setCallback("thread", renderThread)
+        notifier.checkThread(conversation_id)
+
         $msg_entry.focus();
 
         Conversations(null, $("#side-menu-insert"), page_id, true);
@@ -274,41 +276,6 @@ function Thread(data) {
 
     }
     
-    function checkNewMessages() {
-
-        if (current_page_id != page_id)
-            return;
-
-        $.get(getBaseUrl() 
-                + "/api/v1/messages?account_id=" + account_id 
-                + "&conversation_id=" + conversation_id 
-                + "&limit=1")
-            .done(function (data, status) {
-                if (data.length > 0 
-                        && !conversations[conversation_id].contains(data[0].device_id))
-                    refreshMessages();
-            });
-        current_timeout = setTimeout(checkNewMessages, refresh_rate);
-    }
-
-    /**
-     * refresh Messages
-     * Grabs messages from servera
-     * @param limit (optional) - how many messages to grab
-     */
-    function refreshMessages(limit) {
-        // Set message load limit of not provided
-        if (typeof limit == "undefined")
-            limit = config.load_limit;
-
-        $.get(getBaseUrl() 
-                + "/api/v1/messages?account_id=" + account_id 
-                + "&conversation_id=" + conversation_id 
-                + "&limit=" + limit)
-            .done(renderThread)
-            .fail(failed);
-    }
-    
     /**
      * Send sms message
      *
@@ -323,10 +290,10 @@ function Thread(data) {
     *
     * @param id
     * @param data
-    * @param mimeType
+    * @param mime_type
     *
     */
-    function sendMessage(id, data, mimeType) {
+    function sendMessage(id, data, mime_type) {
 
         $convo_tab.prependTo("#side-menu-insert");
 
@@ -337,7 +304,7 @@ function Thread(data) {
         msg_class = "sent " + textClass + " " + msg_theme;
         
         var msg_content = "";
-        if (mimeType == "text/plain")
+        if (mime_type == "text/plain")
             msg_content = data.replace(/\n/g, "<br/>");
         else
             msg_content = $("<div  class=\"loading-text\">Loading MMS data...</div>");
@@ -356,7 +323,7 @@ function Thread(data) {
             message_type: 2,
             data: encrypted,
             timestamp: new Date().getTime(),
-            mime_type: encrypt(mimeType),
+            mime_type: encrypt(mime_type),
             read: true,
             seen: true
         };
@@ -369,13 +336,13 @@ function Thread(data) {
             account_id: account_id,
             read: true,
             timestamp: new Date().getTime(),
-            snippet: mimeType == "text/plain" ? snippetEncrypted : ""
+            snippet: mime_type == "text/plain" ? snippetEncrypted : ""
         };
 
         $.post(getBaseUrl() + "/api/v1/conversations/update/" + conversation_id, conversationRequest, "json");
 
-        if (mimeType != "text/plain") {
-            loadImage(id, account_id, mimeType);
+        if (mime_type != "text/plain") {
+            loadImage(id, account_id, mime_type);
         }
 
         $(".message").linkify();
@@ -470,8 +437,6 @@ function Thread(data) {
             
             message = data[i];
 
-            var mimeType = "";
-
             // Move on if displayed
             if (conversations[conversation_id].contains(message.device_id)) 
                 continue;
@@ -501,11 +466,11 @@ function Thread(data) {
             msg_class += " " + msg_theme
 
             // If text message
-            if (mimeType == "text/plain") {
+            if (message.mime_type == "text/plain") {
 
                 msg_content = message.data.replace(/\n/g, "<br />");
                 
-            } else if (mimeType == "media/youtube") { // If youtube
+            } else if (message.mime_type == "media/youtube") { // If youtube
                 var youtubeLink = message.data
                     .replace("https://img.youtube.com/vi/", "")
                     .replace("/maxresdefault.jpg", "");
@@ -518,7 +483,7 @@ function Thread(data) {
                                 .attr("src", message.data);
                 msg_content.append($img)
 
-            } else if (mimeType == "media/youtube-v2") {
+            } else if (message.mime_type == "media/youtube-v2") {
                 var json = JSON.parse(message.data);
 
                 msg_content = $("<a></a>").attr("href", json.url)
@@ -530,7 +495,7 @@ function Thread(data) {
 
                 msg_content.append($img).append($div);
 
-            } else if (mimeType == "media/web") {
+            } else if (message.mime_type == "media/web") {
                 try {
                     var json = JSON.parse(message.data);
 
@@ -576,7 +541,7 @@ function Thread(data) {
 
             // Add media messages to 
             if(msg_is_mms)
-                loadImage(message.device_id, account_id, mimeType, name)
+                loadImage(message.device_id, account_id, message.mime_type, name)
             
             // TODO revisit later
             var nextTimestamp;
