@@ -92,7 +92,10 @@ function Conversations(data, elem, page, small) {
             $elem.html("<div class=\"spinner\" id=\"loading\">"
                 + "<div class=\"mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active\"></div>"
                 + "</div>");
-            
+
+            componentHandler.upgradeElements($elem);
+
+            notifier.checkConversations(getIndex());
         });
 
         $compose_btn.on('click', function() {

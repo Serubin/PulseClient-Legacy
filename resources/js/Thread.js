@@ -267,8 +267,10 @@ function Thread(data) {
             initial_load = true;
             conversations[conversation_id] = []
 
+            componentHandler.upgradeElements($msg_list);
+            notifier.checkThread(conversation_id);
+
             dismissNotification()
-            refreshMessages();
         });
 
 
