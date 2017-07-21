@@ -209,6 +209,10 @@ function entityEncode(string) {
     return string;
 }
 
+function isReceived(type) {
+    return type == 0 || type == 6;
+}
+
 /**
  * Scrolls message wrapper to bottom
  */

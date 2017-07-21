@@ -105,7 +105,7 @@ function Notifier() {
                 if(message.timestamp == latest_timestamp)
                     found = true;
             
-                if(message.timestamp > last_notification[conversation_id])
+                if(message.timestamp > last_notification[conversation_id] && isReceived(message.message_type))
                     sendNotification(conversation_id, message)
                 
             }
