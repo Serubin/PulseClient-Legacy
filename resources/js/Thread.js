@@ -84,6 +84,8 @@ function Thread(data) {
     
     function constructor() {
         
+        notifier.setCallback("thread", renderThread)
+        notifier.checkThread(conversation_id)
             
         page_id = "thread" + conversation_id + new Date();
         current_page_id = page_id;
@@ -108,7 +110,6 @@ function Thread(data) {
         $archive_btn.show(); // show back button by default 
         $blacklist_btn.show(); // show expand button by default
 
-        
         var archive_btn_text = $archive_btn.find('#archive-btn-text')
 
         if(archived)
@@ -251,9 +252,6 @@ function Thread(data) {
             input.change(dropListener);
         });
 
-        notifier.setCallback("thread", renderThread)
-        notifier.checkThread(conversation_id)
-
         $msg_entry.focus();
 
         Conversations(null, $("#side-menu-insert"), page_id, true);
@@ -295,7 +293,7 @@ function Thread(data) {
     */
     function sendMessage(id, data, mime_type) {
 
-        $convo_tab.prependTo("#side-menu-insert");
+        $convo_tab.detach().prependTo("#side-menu-insert");
 
         var encrypted = encrypt(data);
         var snippetEncrypted = encrypt("You: " + data);
@@ -430,7 +428,7 @@ function Thread(data) {
             $loading.remove();
 
         if(!initial_load)
-            $convo_tab.prependTo("#side-menu-insert");
+            $convo_tab.detach().prependTo("#side-menu-insert");
 
         // Iterate through received messages
         for (var i = data.length - 1; i >= 0; i--) {

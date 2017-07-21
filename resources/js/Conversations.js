@@ -49,6 +49,7 @@ function Conversations(data, elem, page, small) {
     function constructor() {
         
         notifier.setCallback('list', renderConversation);
+        notifier.checkConversations(getIndex());
 
         $refresh_btn.off();
 
@@ -92,14 +93,11 @@ function Conversations(data, elem, page, small) {
                 + "<div class=\"mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active\"></div>"
                 + "</div>");
             
-
         });
 
         $compose_btn.on('click', function() {
             setPage(PAGE_COMPOSE);
         })
-
-        notifier.checkConversations(getIndex());
 
     }
 
