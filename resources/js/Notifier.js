@@ -173,7 +173,8 @@ function Notifier() {
         var snippet = data.snippet || data.data;
         
         var options = {
-            body: snippet
+            body: snippet,
+            icon: "http://localhost:8080/resources/images/vector/pulse.svg",
         }
 
         var notifcation = new Notification(title, options);
