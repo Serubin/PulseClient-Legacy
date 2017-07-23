@@ -576,14 +576,15 @@ function Thread(data) {
         $(".message").linkify();
         $(".linkified").css("color", colorAccent);
         
-        $document = $("html, body");
-        $html = $("html");
+        var $document = $("html");
+        var $body = $("body");
 
         // Show scroll to bottom snackbar - don't interupt scrolling
         if (current_size != conversations[conversation_id].length && !initial_load) {
-
+            
+            var scroll_top = $body.scrollTop() || $document.scrollTop();
             // If near bottom
-            if (!(($document.height() - 400) > $html.scrollTop())) {
+            if (!(($document.height() - 400) > scroll_top)) {
                 scrollToBottom(250)
                 return
             }
