@@ -1,3 +1,6 @@
+natives/pulse-*
+natives/Pulse-*
+
 node_modules/
 resources/App.js
 resources/Lib.js
