@@ -316,6 +316,7 @@ function Thread(data) {
 
         // Add to page
         add_to_page(id, $message);
+        scrollToBottom(250);
 
         // Define request
         var request = {
