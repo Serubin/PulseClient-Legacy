@@ -577,13 +577,13 @@ function Thread(data) {
         $(".linkified").css("color", colorAccent);
         
         $document = $("html, body");
-        $body = $("body");
+        $html = $("html");
 
         // Show scroll to bottom snackbar - don't interupt scrolling
         if (current_size != conversations[conversation_id].length && !initial_load) {
 
             // If near bottom
-            if (!(($document.height() - 400) > $body.scrollTop())) {
+            if (!(($document.height() - 400) > $html.scrollTop())) {
                 scrollToBottom(250)
                 return
             }
