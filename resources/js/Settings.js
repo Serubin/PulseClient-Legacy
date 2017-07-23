@@ -25,7 +25,7 @@ function Settings(data, $elem) {
     var $toolbar            = $("#toolbar");
     var $colored_toolbar    = $("#colored-toolbar");
     var $toolbar_title      = $("#toolbar-title");
-    var $refresh_settings   = $("#refresh_settings");
+    var $refresh_btn        = $("#refresh-settings");
     // Menu Buttons
     var $delete_btn         = $("#delete-btn");
     var $archive_btn        = $("#archive-btn");
@@ -164,14 +164,14 @@ function Settings(data, $elem) {
 
 
         // Refresh from phone button
-        var $refresh = $("<div></div>").addClass("click-item")
-                                .attr("id", "refresh_settings")
+        var $refresh_btn = $("<div></div>").addClass("click-item")
+                                .attr("id", "refresh-settings")
         var $title   = $("<div></div>").addClass(textClass)
                                 .html("Refresh settings from phone");
         var $value   = $("<div></div>").addClass("mdl-color-text--grey-600")
                                 .html("These settings are pulled right from the app");
         
-        $refresh.append($title).append($value);
+        $refresh_btn.append($title).append($value);
 
         $account_list.prepend($refresh);
 
@@ -184,7 +184,7 @@ function Settings(data, $elem) {
             $.get(getBaseUrl() + "/api/v1/accounts/settings?account_id=" + account_id)
                     .done(updateSettings);
         }
-        $refresh_settings.on('click', update_settings_click);
+        $refresh.on('click', update_settings_click);
 
     
 	}
