@@ -174,7 +174,7 @@ function Notifier() {
         
         var options = {
             body: snippet,
-            icon: "http://localhost:8080/resources/images/vector/pulse.svg",
+            icon: "/resources/images/vector/pulse.svg",
         }
 
         var notifcation = new Notification(title, options);
