@@ -305,15 +305,6 @@ function Compose(data, $elem) {
         $autocomp.css({
             'left': input.position().left,
             'width': input.width() + parseFloat(input.css('padding-left'),10) + parseInt(input.css('border-left-width'),10) + 1,
-            'position': 'absolute',
-            'background-color': "white",
-            'border': '1px solid #dddddd',
-            'max-height': '350px',
-            'overflow': 'scroll',
-            'overflow-x': 'hidden',
-            'font-family': input.css('font-family'),
-            'font-size' : input.css('font-size'),
-            'z-index' : '10'
         }).insertAfter(input);
 
 

@@ -1,31 +1,48 @@
-/*
- *  Copyright 2017 Solomon Rubin
- *  Copyright 2016 Jake Klinker
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-.mdl-layout__drawer, .send-bar-content, .conversation-card.mdl-card,
-.sent, .message {
+.conversation-card.mdl-card, .sent, .message {
     background: #202B30;
 }
 
-.mdl-layout__content, .mdl-navigation-messages, .compose-card, .adding-card, .edit-card {
+.mdl-navigation, .mdl-layout__drawer, .mdl-layout__content, .send-bar-content,
+.mdl-navigation-messages, .conversation-card-small.mdl-card, #compose-head, .autocomplete-result, .autocomplete-card {
+    background: #29373d;
+}
+
+.compose-card, .adding-card, .edit-card {
     background: #374248;
 }
 
 .conversation-title.mdl-card__supporting-text, .mdl-color-text--grey-900,
 .mdl-textfield__input, .mdl-textfield__label, .empty-text {
 	  color: white;
+}
+
+body, #side-menu {
+  background-color: #29373d;
+}
+
+#drawer_links .link-card {
+  color: white;
+  background-color: #29373d;
+}
+
+#toolbar {
+  border-bottom: solid 1px #ca2100;
+  background-color: #202B30;
+  border-color: #202B30;
+}
+
+#toolbar-title, .mdl-card__supporting-text, .material-icons{
+  color: white;
+}
+
+.autocomplete-result {
+    background-color: #29373d;
+    border: 1px solid #374248;
+    color: white;
+}
+
+.menu_icon {
+    opacity: 1;
 }
 
 .sent:after {
@@ -47,18 +64,42 @@
 ::-webkit-scrollbar {
     width: 10px;
 }
- 
+
 ::-webkit-scrollbar-track {
   	border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
 }
- 
+
 ::-webkit-scrollbar-thumb {
   	border-radius: 10px;
-    background: #202b30;  
+    background: #202b30;
     outline: 1px solid slategrey;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #555;  
+	background: #555;
+}
+
+.icon_logo {
+  background: url(../images/vector/pulse-dark.svg) 0 0 no-repeat;
+}
+
+.icon_scheduled_messages {
+  background: url(../images/vector/scheduled_messages-dark.svg) 0 0 no-repeat;
+}
+
+.icon_conversations {
+  background: url(../images/vector/inbox-dark.svg) 0 0 no-repeat;
+}
+
+.icon_archive {
+  background: url(../images/vector/archive-dark.svg) 0 0 no-repeat;
+}
+
+.icon_blacklist {
+  background: url(../images/vector/blacklist-dark.svg) 0 0 no-repeat;
+}
+
+.icon_menu_toggle {
+    background: url(../images/vector/menu_toggle-dark.svg) 0 0 no-repeat;
 }

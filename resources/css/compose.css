@@ -1,3 +1,14 @@
+.autocomplete-result {
+    position: absolute;
+    background-color: white;
+    border: 1px solid rgb(221, 221, 221);
+    max-height: 350px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    font-family: "Helvetica","Arial",sans-serif;
+    font-size: 16px;
+    z-index: 10;
+}
 .autocomplete-card {
     display: block;
     width: 100%;
