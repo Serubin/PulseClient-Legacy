@@ -173,7 +173,7 @@ function Settings(data, $elem) {
         
         $refresh_btn.append($title).append($value);
 
-        $account_list.prepend($refresh);
+        $account_list.prepend($refresh_btn);
 
         componentHandler.upgradeElements($("[data-content=inserted]"));
 
@@ -184,7 +184,7 @@ function Settings(data, $elem) {
             $.get(getBaseUrl() + "/api/v1/accounts/settings?account_id=" + account_id)
                     .done(updateSettings);
         }
-        $refresh.on('click', update_settings_click);
+        $refresh_btn.on('click', update_settings_click);
 
     
 	}
