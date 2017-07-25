@@ -548,7 +548,7 @@ function Thread(data) {
             if(msg_is_mms)
                 loadImage(message.device_id, account_id, message.mime_type, name)
             
-            // TODO revisit later
+            // Timestamp
             var nextTimestamp;
             if (i == 0) {
                 nextTimestamp = new Date();
@@ -558,18 +558,18 @@ function Thread(data) {
 
             
 
-            // TODO fix later
-            var date = null;
-            if (date != null && false) {
-                var date = compareTimestamps(new Date(message.timestamp), nextTimestamp);
-                var $dateWrap = $("<div></div>").addClass("data-wrapper");
-                var $date     = $("<div></div>")
-                                    .addClass("data-" 
+            var date = compareTimestamps(new Date(message.timestamp), nextTimestamp);
+            if (date != null) {
+                var date       = compareTimestamps(new Date(message.timestamp), nextTimestamp);
+                var $date_wrap = $("<div></div>").addClass("date-wrapper");
+                var $date      = $("<div></div>")
+                                    .addClass("date-" 
                                         + (message.message_type == 0 ? 
                                             "received" : "sent"))
-                                    .addClass("mdl-color-text--grey-500");
-                $dataWrap.append($date);
-                add_to_page("t-" + message.timestamp, $dateWrap);
+                                    .addClass("mdl-color-text--grey-500")
+                                    .html(date);
+                $date_wrap.append($date);
+                add_to_page("t-" + message.timestamp, $date_wrap);
             }
         }
 

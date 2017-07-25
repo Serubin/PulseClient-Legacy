@@ -209,6 +209,14 @@ function entityEncode(string) {
     return string;
 }
 
+function compareTimestamps(date, nextDate) {
+    if (nextDate.getTime() > date.getTime() + (1000 * 60 * 15)) {
+        return date.toLocaleString();
+    } else {
+        return null;
+    }
+}
+
 function isReceived(type) {
     return type == 0 || type == 6;
 }
