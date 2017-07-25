@@ -333,7 +333,8 @@ function Thread(data) {
 
         $.post(getBaseUrl() + "/api/v1/messages/add", request, "json")
             .fail(failed);
-
+        
+        $message.attr("title", new Date(request.timestamp).toLocaleString())
 
         var conversationRequest = {
             account_id: account_id,
@@ -541,6 +542,7 @@ function Thread(data) {
 
             var $message = messageFactory(message.device_id, 
                     msg_class, msg_style, msg_content);
+            $message.attr("title", new Date(message.timestamp).toLocaleString())
 
             add_to_page(message.device_id, $message);
 
