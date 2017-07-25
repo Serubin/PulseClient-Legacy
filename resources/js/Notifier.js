@@ -57,6 +57,7 @@ function Notifier() {
     function processTimestamp(data) {
 
         data = data / 1000 >> 0; // Remove ms
+        data = data * 1000; // Add back zero timestamp
 
         // If greater or equal, ignore 
         if(data <= latest_timestamp)
@@ -90,6 +91,7 @@ function Notifier() {
                 var message = data[i];
                 
                 message.timestamp = message.timestamp / 1000 >> 0; // Remove ms
+                message.timestamp = message.timestamp * 1000; // Add back zero timestamp
 
                 try { 
                     message.mime_type = decrypt(message.mime_type);
@@ -137,6 +139,7 @@ function Notifier() {
             var convo = data[i];
             
             convo.timestamp = convo.timestamp / 1000 >> 0; // Remove ms
+            convo.timestamp = convo.timestamp * 1000; // Add back zero timestamp
 
             try {
                 convo.title = decrypt(convo.title);
