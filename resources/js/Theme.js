@@ -26,12 +26,12 @@ function enableTheme() {
     var baseTheme = getBaseTheme();
     if (baseTheme === "dark" || (baseTheme === "day_night" && isNight()) || baseTheme === "black") {
         textClass = "mdl-color-text--white";
-        $('head').append('<link rel="stylesheet" href="resources/css/themed-dark.css" type="text/css" />');
+        $('head').append('<link rel="stylesheet" href="/resources/css/themed-dark.css" type="text/css" />');
         $('.mdl-color-text--grey-900').addClass(textClass).removeClass('mdl-color-text--grey-900');
 
         if (baseTheme === "black") {
             drawerColor = "#000000";
-            $('head').append('<link rel="stylesheet" href="resources/css/themed-black.css" type="text/css" />');
+            $('head').append('<link rel="stylesheet" href="/resources/css/themed-black.css" type="text/css" />');
         } else {
             drawerColor = "#29373d";
         }
