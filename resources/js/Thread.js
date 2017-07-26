@@ -276,6 +276,72 @@ function Thread(data) {
 
     }
     
+
+    /**
+     * Loads entire thread from server
+     * Decrypts and then calls render
+     *
+     * @param limit - amount of messages to load (optional)
+     *                defaults to config.load_limit
+     */
+    function loadThread(limit) {
+
+        // Set message load limit of not provided
+        if (typeof limit == "undefined")
+            limit = config.load_limit;
+
+        // Fetch thread
+        $.get(getBaseUrl() 
+                + "/api/v1/messages?account_id=" + account_id 
+                + "&conversation_id=" + conversation_id 
+                + "&limit=" + limit)
+            .done(processThread)
+            .fail(failed);
+        
+        /**
+         * Processes thread after load
+         * decrypts messages and calls render
+         */
+        function processThread() {
+
+            // Decrypt received items
+            for(var i = 0; i < data.length; i++) {
+                data[i] = decryptMessage(data[i]);
+            }
+            
+            // Render
+            renderThread(data);
+        }
+
+    }
+
+    /**
+     * Decrypts single message
+     *
+     * @param message - message object
+     * @return decrypted message object
+     */
+    function decryptMessage(message) {
+
+        // Removes miliiseconds from timestamp
+        message.timestamp = message.timestamp / 1000 >> 0; // Remove ms
+        message.timestamp = message.timestamp * 1000; // Add back zero timestamp
+
+        // Decrypt
+        try { 
+            message.mime_type = decrypt(message.mime_type);
+
+            message.data = decrypt(message.data)
+            message.data = entityEncode(message.data); // encode message
+
+            message.message_from = decrypt(message.message_from);
+        } catch (err) {
+            continue;
+        }
+
+        return message;
+    }
+
     /**
      * Send sms message
      *

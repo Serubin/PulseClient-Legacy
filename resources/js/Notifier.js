@@ -80,58 +80,6 @@ function Notifier() {
         latest_timestamp = data;
     }
 
-    function checkThread(conversation_id, limit) {
-        // Set message load limit of not provided
-        if (typeof limit == "undefined")
-            limit = config.load_limit;
-
-        $.get(getBaseUrl() 
-                + "/api/v1/messages?account_id=" + account_id 
-                + "&conversation_id=" + conversation_id 
-                + "&limit=" + limit)
-            .done(processThread)
-            .fail(failed);
-
-        function processThread(data) {
-            
-            var found = false;
-
-            for(var i = 0; i < data.length; i++) {
-                var message = data[i];
-                
-                message.timestamp = message.timestamp / 1000 >> 0; // Remove ms
-                message.timestamp = message.timestamp * 1000; // Add back zero timestamp
-
-                try { 
-                    message.mime_type = decrypt(message.mime_type);
-
-                    message.data = decrypt(message.data)
-                    message.data = entityEncode(message.data);
-
-                    message.message_from = decrypt(message.message_from);
-                } catch (err) {
-                    continue;
-                }
-                
-                if(message.timestamp == latest_timestamp)
-                    found = true;
-            
-                if(message.timestamp > last_notification[conversation_id] && isReceived(message.message_type))
-                    sendNotification(conversation_id, message)
-                
-            }
-
-            if(typeof callbacks.thread != "undefined")
-                callbacks.thread(data);
-            
-            if(!found)
-                checkConversations(getIndex());
-            
-        }
-
-    }
-    this.checkThread = checkThread;
-
 
     function checkConversations(index) {
         $.get(getBaseUrl() + "/api/v1/conversations/" + index + "?account_id=" + account_id)
