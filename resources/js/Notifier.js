@@ -19,8 +19,9 @@ function Notifier() {
     
     var initial_load = true;
 
-    var latest_timestamp = 0;
-    var last_notification = {};
+    var latest_timestamp    = 0;
+    var last_notification   = {};
+    var socket              = null;
 
     var callbacks = {
         'thread': undefined,
@@ -28,9 +29,17 @@ function Notifier() {
     }
 
     function constructor() {
-        checkTimestamp()
+        checkTimestamp();
+
+        socket = new WebSocket("wss://api.messenger.klinkerapps.com/api/v1/stream?account_id=" + account_id);
         
     }
+
+    //events
+    //added_message
+    //update_conversation_snippet
+    //dismissed_notification
+    //update_message_type
     
     function setCallback(type, callback) {
         callbacks[type] = callback;
