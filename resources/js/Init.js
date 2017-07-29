@@ -159,6 +159,9 @@ function Init(){
 
         current_conversation = null;
 
+        if(!full_theme && $side_menu.css("margin-left") == "0px") 
+            $("#logo").click();
+
         var sectionFunc = window[page.ucFirst()]; // Get function
         if(typeof sectionFunc != "function") // Exec function
             return setPage(PAGE_LIST);

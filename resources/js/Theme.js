@@ -16,6 +16,8 @@
  */
 
 var globalColor, globalColorDark, globalColorAccent, textClass;
+
+var full_theme = true;
  
 /**
  * Enables initial theme
@@ -240,6 +242,8 @@ function loadMiniVersion() {
 			$outside_sidemenu.fadeIn(500);
 		}
 	});
+
+    full_theme = false;
 }
 
 function loadFullVersion() {
@@ -255,5 +259,8 @@ function loadFullVersion() {
 	$logo_image.removeClass(hasColoredToolbar() ? "icon_menu_toggle_dark" : "icon_menu_toggle");
 	$logo_image.addClass(hasColoredToolbar() ? "icon_logo_dark" : "icon_logo");
 	$logo_image.css("margin-top", "2px");
+
+
+    full_theme = true;
 }
 
