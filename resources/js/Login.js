@@ -21,14 +21,14 @@ function Login() {
     var $username           = $("#username");
     var $password           = $("#password");
     var $login              = $("#login");
-    var $navd_title         = $("#nav-drawer-title");
-    var $navd_subtitle      = $("#nav-drawer-subtitle");
+    var $toolbar            = $("#toolbar");
+    var $toolbar_title      = $("#toolbar-title");
 
     function constructor() {
         
-
-        $navd_title.html("Pulse");
-        $navd_subtitle.html("Please login");
+        // Set page title
+        document.title = "Pulse";
+        $toolbar_title.html("Login");
 
         $parent.on('click', '#login', do_login);
 
