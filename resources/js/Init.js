@@ -27,6 +27,7 @@ var $content;
 var $insert;
 var $back_btn;
 var $more_btn;
+var snackbarContainer;
 
 var account_id = localStorage.getItem("account_id");
 var page;
@@ -50,6 +51,7 @@ function Init(){
     var $content            = $("#content");
     var $toolbar            = $("#toolbar");
     var $toolbar_title      = $("#toolbar-title");
+    var snackbarContainer   = document.querySelector('#snackbar');
     var $inserted           = null;
 
     var color               =  "#2196F3";
