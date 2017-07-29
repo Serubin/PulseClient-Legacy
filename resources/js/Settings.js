@@ -215,9 +215,16 @@ function Settings(data, $elem) {
      * Updates settings success
      */
     function updateSettings(data, status) {
+        prev_base_theme = localStorage.getItem("base_theme");
+
         localStorage.setItem("global_color_theme", data.global_color_theme);
         localStorage.setItem("base_theme", data.base_theme);
         localStorage.setItem("rounder_bubbles", data.rounder_bubbles + "");
+        
+        if(prev_base_theme != data.base_theme)
+            window.location = window.location.href;
+
+        constructor();
     }
 
     constructor();
