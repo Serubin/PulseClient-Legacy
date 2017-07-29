@@ -1,4 +1,4 @@
-.conversation-card.mdl-card, .sent, .message {
+.conversation-card.mdl-card, #login-pane .mdl-card, .sent, .message {
     background: #202B30;
 }
 

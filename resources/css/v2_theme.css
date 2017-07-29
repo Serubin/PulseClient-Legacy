@@ -272,6 +272,12 @@ a {
   margin-right: 18px;
 }
 
+#login-pane {
+    left: calc(50% - 330px/2);
+    width: 330px;
+    margin: 5em auto;
+}
+
 @media (min-width:950px) {
   #content {
     width: 680px;
