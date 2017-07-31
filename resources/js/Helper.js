@@ -15,34 +15,6 @@
  *  limitations under the License.
  */
 
-
-/**
- * Enables initial theme
- */
-function enableTheme() {
-    setGlobalColor();
-
-    var baseTheme = getBaseTheme();
-    if (baseTheme === "dark" || (baseTheme === "day_night" && isNight()) || baseTheme === "black") {
-        textClass = "mdl-color-text--white";
-        $('head').append('<link rel="stylesheet" href="resources/css/themed-dark.css" type="text/css" />');
-        $('.mdl-color-text--grey-900').addClass(textClass).removeClass('mdl-color-text--grey-900');
-
-        if (baseTheme === "black") {
-            $('head').append('<link rel="stylesheet" href="resources/css/themed-black.css" type="text/css" />');
-        }
-    } else {
-        textClass = "mdl-color-text--grey-900";
-    }
-
-    $(".empty").css("background-color", globalColor);
-    $(".mdl-layout__header").css("background-color", globalColor);
-    $(".mdl-color--primary").css("background-color", globalColor);
-    $("#nav-drawer-title").css("background-color", globalColorDark);
-    $("#nav-drawer-subtitle").css("background-color", globalColorDark);
-    $("#compose").css("background-color", globalColorAccent);
-}
-
 function decrypt(data) {
     if (data == null) {
         return "";
