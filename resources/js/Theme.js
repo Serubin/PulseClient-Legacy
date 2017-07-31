@@ -49,7 +49,7 @@ function enableTheme() {
       $(".icon_logo").addClass("icon_logo_dark").removeClass("icon_logo");
       $(".icon_menu_toggle").addClass("icon_menu_toggle_dark").removeClass("icon_menu_toggle");
 
-      var color = hasGlobalTheme() ? globalColor : "#009688";
+      var color = hasGlobalTheme() ? globalColor : "#2196F3";
       $("#toolbar").css("background-color", color);
 
     } else {
