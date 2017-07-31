@@ -170,6 +170,10 @@ function Notifier() {
 
 
     function sendNotification(conversation_id, data) {
+
+        if(!allowNotification()) // Ignore if notifications are disallowed
+            return;
+
         last_notification[conversation_id] = data.timestamp;
 
         var title = data.title || localStorage.getItem(conversation_id + "title");
