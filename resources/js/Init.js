@@ -69,6 +69,11 @@ function Init(){
 
     function constructor() {
 
+        $( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
+            if (thrownError === "Unauthorized")
+                logout();
+        });
+
         Nav();
 
         notifier = new Notifier();

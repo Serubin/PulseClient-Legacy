@@ -527,7 +527,6 @@ function Thread(data) {
                 msg_is_mms = true;
             }
 
-            // TODO do like date wrapper - also color message to contact?
             if ((message.message_from != null 
                     && message.message_from.length) != 0 
                     && message.message_type == 0 ) {
