@@ -196,6 +196,13 @@ function showConfirmDialog(message, func) {
   });
 }
 
+/**
+ * entityEncode
+ * Removes characters "<", ">", "\n" and replaces with transfer/html safe items
+ *
+ * @param string - unencoded string
+ * @return encoded string
+ */
 function entityEncode(string) {
     while (string.indexOf("<") !== -1) {
         string = string.replace("<", "&lt;");
@@ -209,6 +216,35 @@ function entityEncode(string) {
     return string;
 }
 
+/**
+ * entityDecode
+ * Removes html/transfer safe characters with original characters
+ *
+ * @param string - encoded string
+ * @return unencoded string
+ */
+function entityDecode(string) {
+    while (string.indexOf("<") !== -1) {
+        string = string.replace("&lt;", "<");
+    }
+
+    while (string.indexOf(">") !== -1) {
+        string = string.replace("&gt;", ">");
+    }
+
+    string = string.replace('<br />', "\n");
+    return string;
+}
+
+/**
+ * CompareTimestamps
+ * Checks if timestamp is within 15 minutes of each other.
+ *
+ * @param date
+ * @param nextDate
+ *
+ * @return date || null
+ */
 function compareTimestamps(date, nextDate) {
     if (nextDate.getTime() > date.getTime() + (1000 * 60 * 15)) {
         return date.toLocaleString();
@@ -217,6 +253,13 @@ function compareTimestamps(date, nextDate) {
     }
 }
 
+/**
+ * isReceived
+ * is message type recieved or sent
+ *
+ * @param type - message type (int)
+ * @return boolean
+ */
 function isReceived(type) {
     return type == 0 || type == 6;
 }
@@ -235,25 +278,63 @@ function scrollToBottom(speed) {
     $window.animate({"scrollTop": $document.scrollHeight}, speed);
 }
 
+/** 
+ * allowNotification
+ * Checks if user is allowing notifications to be triggered
+ *
+ * @return boolean
+ */
 function allowNotification() {
   var notification_toggle = localStorage.getItem("notifications");
   return typeof notification_toggle !== "undefined" && notification_toggle === "yes";
+}
+
+/**
+ * logout
+ * Removes all local keys / account data.
+ * Redirect once done
+ */
+function logout() {
+
+    // Remove account info
+    account_id = null;
+    localStorage.removeItem("account_id");
+    localStorage.removeItem("hash");
+    localStorage.removeItem("salt");
+    localStorage.removeItem("phone_number");
+    localStorage.removeItem("name");
+
+    window.location.replace("/" ); // redirect
 }
 
 
 /**
 * Contains element
 * @param element value
+*
+* @return boolean
 */
 Array.prototype.contains = function(element) {
     return this.indexOf(element) > -1 ? true : false
 }
 
-
+/**
+ * ucFirst
+ * Upper case first letter of string.
+ *
+ * @return string
+ */
 String.prototype.ucFirst = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
+/**
+ * size
+ * Gets size of js object
+ *
+ * @param object
+ * @return size
+ */
 Object.size = function(obj) {
     return Object.keys(obj).length;
 }
