@@ -72,7 +72,7 @@ function Conversations(data, elem, page, small) {
             }
 
             // Set page title
-            document.title = "Pulse";
+            document.title = "Pulse - Conversations";
             $toolbar_title.html("Conversations");
 
             if(archive)

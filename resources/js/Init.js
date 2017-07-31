@@ -119,8 +119,8 @@ function Init(){
         var data; // Url data
 
         // Set page title
-        document.title = "Pulse - Settings";
-        $toolbar_title.html("Settings");
+        document.title = "Pulse";
+        $toolbar_title.html("Pulse");
 
 
         if(typeof url != "string")
