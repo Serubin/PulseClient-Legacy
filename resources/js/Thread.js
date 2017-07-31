@@ -677,6 +677,10 @@ function Thread(data) {
         if(sent)
             snippet = "You: " + snippet;
 
+        if(typeof snippet != "undefined")  // If exists. Quick fix
+            // Match and remove all iterations of "<br>"
+            snippet = snippet.split(/<br ?\/??>/g).join("");
+
         $el.find(".conversation-snippet").html(snippet);
         
         $el.find("span").removeClass("bold");
