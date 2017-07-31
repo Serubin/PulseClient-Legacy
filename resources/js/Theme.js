@@ -44,21 +44,21 @@ function enableTheme() {
 
     if (hasColoredToolbar()) {
 
-      $(".material-icons").addClass("material-icons-white");
-      $("#toolbar-title").css("color", "white");
-      $(".icon_logo").addClass("icon_logo_dark").removeClass("icon_logo");
-      $(".icon_menu_toggle").addClass("icon_menu_toggle_dark").removeClass("icon_menu_toggle");
+        $(".material-icons").addClass("material-icons-white");
+        $("#toolbar-title").css("color", "white");
+        $(".icon_logo").addClass("icon_logo_dark").removeClass("icon_logo");
+        $(".icon_menu_toggle").addClass("icon_menu_toggle_dark").removeClass("icon_menu_toggle");
 
-      var color = hasGlobalTheme() ? globalColor : "#2196F3";
-      $("#toolbar").css("background-color", color);
+        var color = hasGlobalTheme() ? globalColor : "#2196F3";
+        $("#toolbar").css("background-color", color);
 
     } else {
 
-      $("#toolbar").css("background-color", "#fafafa");
-      $("#toolbar-title").css("color", "#666666");
-      $(".material-icons").removeClass("material-icons-white");
-      $(".icon_logo_dark").addClass("icon_logo").removeClass("icon_logo_dark");
-      $(".icon_menu_toggle_dark").addClass("icon_menu_toggle").removeClass("icon_menu_toggle_dark");
+        $("#toolbar").css("background-color", "#fafafa");
+        $("#toolbar-title").css("color", "#666666");
+        $(".material-icons").removeClass("material-icons-white");
+        $(".icon_logo_dark").addClass("icon_logo").removeClass("icon_logo_dark");
+        $(".icon_menu_toggle_dark").addClass("icon_menu_toggle").removeClass("icon_menu_toggle_dark");
 
     }
 
@@ -233,7 +233,7 @@ function loadMiniVersion() {
 		var $outside_sidemenu = $("#outside-side-menu");
 
 		if ($sidemenu.css("margin-left") == "0px") {
-			$html.removeClass("side-menu_show");
+            $html.removeClass("side-menu_show");
 			$sidemenu.css("margin-left", "-269px");
 			$outside_sidemenu.fadeOut(500);
 		} else {
@@ -250,9 +250,11 @@ function loadFullVersion() {
 	$("html").removeClass("side-menu_show");
 	$("#content").css("margin-left", SIDE_MENU_WIDTH + "px");
 
-	$("#logo").show();
+	$("#logo").off();
+
     $("#side-menu").css("margin-left", "0px");
 	$("#side-menu_toggle").hide();
+    $("#outside-side-menu").hide()
 	$("#side-menu_toggle").off();
 
 	var $logo_image = $("#logo-image");
