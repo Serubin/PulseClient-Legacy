@@ -153,6 +153,9 @@ function Conversations(data, elem, page, small) {
             convo.color         = toColor(convo.color);
             convo.color_dark    = toColor(convo.color_dark);
             convo.color_accent  = toColor(convo.color_accent);
+
+            // Match and remove all iterations of "<br>"
+            convo.snippet       = convo.snippet.split(/<br ?\/??>/g).join("");
             
             $conv_el    = $("#"+ convo.device_id);
 

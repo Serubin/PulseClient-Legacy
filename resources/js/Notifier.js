@@ -176,7 +176,7 @@ function Notifier() {
         var snippet = data.snippet || data.data;
         
         var options = {
-            body: snippet,
+            body: entityDecode(snippet),
             icon: "/resources/images/vector/pulse.svg",
         }
 
