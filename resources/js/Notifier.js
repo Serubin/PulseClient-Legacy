@@ -17,7 +17,8 @@
 
 function Notifier() {
     
-    var initial_load = true;
+    var _this               = this;
+    var initial_load        = true;
 
     var latest_timestamp    = 0;
     var last_notification   = {};
@@ -32,7 +33,30 @@ function Notifier() {
         checkTimestamp();
 
         socket = new WebSocket("wss://api.messenger.klinkerapps.com/api/v1/stream?account_id=" + account_id);
-        
+        socket.onopen = function (e) {
+            socket.send(JSON.stringify({ "command" : "subscribe", "identifier" : "{\"channel\":\"NotificationsChannel\"}" }));
+        }
+
+         socket.onclose = function(e) {
+             console.log("Notification channel unexpectedly closed");
+             setTimeout(constructor, 5000);
+         }
+    }
+
+    function handleMessage(e) {
+        var func = _this[e.message.operation];
+        if(typeof func == "undefined")
+            return;
+
+        func(e.message);
+    }
+
+
+    function add_message(e) {
+        data = e.content;
+
+        data = g_thread.decryptMessage(data);
+        g_thread.renderThread([ data ]); //TODO make global
     }
 
     //events
@@ -40,12 +64,7 @@ function Notifier() {
     //update_conversation_snippet
     //dismissed_notification
     //update_message_type
-    
-    function setCallback(type, callback) {
-        callbacks[type] = callback;
-    }
-    this.setCallback = setCallback;
-
+    //
     function checkTimestamp() {
         setTimeout(checkTimestamp, config.refresh_rate_low);
         

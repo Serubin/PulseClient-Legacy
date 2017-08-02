@@ -341,6 +341,7 @@ function Thread(data) {
 
         return message;
     }
+    this.decryptMessage = decryptMessage;
 
     /**
      * Send sms message
@@ -681,7 +682,7 @@ function Thread(data) {
             initial_load = false
         }
     }
-    
+    this.renderThread = renderThread;
 
     /**
      * Handles drop events
