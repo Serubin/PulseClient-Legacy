@@ -72,7 +72,7 @@ function Conversations(data, elem, page, small) {
             }
 
             // Set page title
-            document.title = "Pulse";
+            document.title = "Pulse - Conversations";
             $toolbar_title.html("Conversations");
 
             if(archive)
@@ -153,6 +153,9 @@ function Conversations(data, elem, page, small) {
             convo.color         = toColor(convo.color);
             convo.color_dark    = toColor(convo.color_dark);
             convo.color_accent  = toColor(convo.color_accent);
+
+            // Match and remove all iterations of "<br>"
+            convo.snippet       = convo.snippet.split(/<br ?\/??>/g).join("");
             
             $conv_el    = $("#"+ convo.device_id);
 
@@ -166,6 +169,7 @@ function Conversations(data, elem, page, small) {
 
                 $icon       = "<svg class=\"contact-img\" height=\"48\" width=\"48\">"
                             + "<circle cx=\"24\" cy=\"24\" r=\"24\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
+                            + "<text x=\"24\" style=\"text-anchor: middle;font-size: 30px;fill: #fff;font-weight: 300;\" y=\"34\">" + convo.title.substr(0,1) + "</text>"
                             + "</svg>";
 
                 $text_wrap  = $("<p></p>").addClass("conversation-text");
@@ -188,10 +192,7 @@ function Conversations(data, elem, page, small) {
                     $snippet.addClass("conversation-snippet-small");
                     $icon = "<svg class=\"contact-img contact-img-small\" height=\"24\" width=\"24\">"
                             + "<circle cx=\"12\" cy=\"12\" r=\"12\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
-                            + "</svg>";
-                } else {
-                    $icon = "<svg class=\"contact-img\" height=\"48\" width=\"48\">"
-                            + "<circle cx=\"24\" cy=\"24\" r=\"24\" shape-rendering=\"auto\" fill=\"" + (hasGlobalTheme() ? globalColor : data[i].color) + "\"/>"
+                            + "<text style=\"text-anchor: middle;font-size: 16px;fill: #fff;font-weight: 300;\" x=\"12\" y=\"17.5\">" + convo.title.substr(0,1) + "</text>"
                             + "</svg>";
                 }
 

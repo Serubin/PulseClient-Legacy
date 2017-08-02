@@ -593,7 +593,6 @@ function Thread(data) {
                 msg_is_mms = true;
             }
 
-            // TODO do like date wrapper - also color message to contact?
             if ((message.message_from != null 
                     && message.message_from.length) != 0 
                     && message.message_type == 0 ) {
@@ -650,9 +649,10 @@ function Thread(data) {
         // Show scroll to bottom snackbar - don't interupt scrolling
         if (current_size != conversations[conversation_id].length && !initial_load) {
             
-            var scroll_top = $body.scrollTop() || $document.scrollTop();
+            var scroll_top = ($body.scrollTop() || $document.scrollTop()) + $document.height();
+
             // If near bottom
-            if (!(($document.height() - 400) > scroll_top)) {
+            if (!(($body.height() - 400) > scroll_top) && $msg_list.height() > $document.height()) {
                 scrollToBottom(250)
                 return
             }
@@ -741,6 +741,10 @@ function Thread(data) {
 
         if(sent)
             snippet = "You: " + snippet;
+
+        if(typeof snippet != "undefined")  // If exists. Quick fix
+            // Match and remove all iterations of "<br>"
+            snippet = snippet.split(/<br ?\/??>/g).join("");
 
         $el.find(".conversation-snippet").html(snippet);
         

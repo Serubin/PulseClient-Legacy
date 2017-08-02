@@ -27,6 +27,7 @@ var $content;
 var $insert;
 var $back_btn;
 var $more_btn;
+var snackbarContainer;
 
 var account_id = localStorage.getItem("account_id");
 var page;
@@ -50,6 +51,7 @@ function Init(){
     var $content            = $("#content");
     var $toolbar            = $("#toolbar");
     var $toolbar_title      = $("#toolbar-title");
+    var snackbarContainer   = document.querySelector('#snackbar');
     var $inserted           = null;
 
     var color               =  "#2196F3";
@@ -66,6 +68,11 @@ function Init(){
     $(window).on('popstate', loadPage);
 
     function constructor() {
+
+        $( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
+            if (thrownError === "Unauthorized")
+                logout();
+        });
 
         Nav();
 
@@ -117,8 +124,8 @@ function Init(){
         var data; // Url data
 
         // Set page title
-        document.title = "Pulse - Settings";
-        $toolbar_title.html("Settings");
+        document.title = "Pulse";
+        $toolbar_title.html("Pulse");
 
 
         if(typeof url != "string")
@@ -158,6 +165,9 @@ function Init(){
         $blacklist_btn.hide(); // Hide expand button by default
 
         current_conversation = null;
+
+        if(!full_theme && $side_menu.css("margin-left") == "0px") 
+            $("#logo").click();
 
         var sectionFunc = window[page.ucFirst()]; // Get function
         if(typeof sectionFunc != "function") // Exec function
