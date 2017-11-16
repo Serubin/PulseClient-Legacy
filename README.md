@@ -1,4 +1,7 @@
 # PulseClient for PulseSMS
+
+## This version is deprecated. The new repo can be found at [Serubin/PulseClient-Vue](https://github.com/Serubin/PulseClient-Vue].
+
 This project is a remake of the original KlinkerApp PulseSMS web client. It's based on the original Open Source (Apache License) implementation. It aims to help fix some of the short comings of the original app as outlined below under **Features**. 
 
 The original app is located at [messenger.klinkerapps.com](https://messenger.klinkerapps.com/). The current hosted version of this app is located at [pulse.serubin.net](https://pulse.serubin.net). 
